@@ -17,8 +17,19 @@ export default function Map() {
     "heading": 0,
     "zoom": 18,
     "center": { lat: 37.773972, lng: -122.431297  },
-    "mapId": "fd96cc9ffed49009"
+    "mapId": "fd96cc9ffed49009",
+    "styles": [
+      {
+        "featureType": "poi",
+        "stylers": [
+          { "visibility": "off" }
+        ]
+      }
+    ]
   }
+
+ 
+
   
   
   async function initMap() {  
@@ -35,7 +46,61 @@ export default function Map() {
     const webGLOverlayView = new google.maps.WebGLOverlayView();
 
 
+    const  customStyled = [
+      {
+        featureType: "all",
+        elementType: "labels",
+        stylers: [
+          { visibility: "off" }
+        ]
+      }
+    ]
+
+    map.set('styles',customStyled);
+
+
+
     console.log("mappppp", loader)
+
+    // function getLocation(map) {
+    //   let infoWindow = new google.maps.InfoWindow();
+    
+    //   const locationButton = document.createElement("button");
+    //   locationButton.className = "btn";
+    
+    //   locationButton.textContent = "Pan to Current Location";
+    //   locationButton.classList.add("custom-map-control-button");
+    //   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    //   locationButton.addEventListener("click", () => {
+    //     // Try HTML5 geolocation.
+    //     if (navigator.geolocation) {
+    //       navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //           const pos = {
+    //             lat: position.coords.latitude,
+    //             lng: position.coords.longitude,
+    //           };
+    
+    //           infoWindow.setPosition(pos);
+    //           infoWindow.setContent("Location found.");
+    //           infoWindow.open(map);
+    //           mapOptions = {"tilt": 0,
+    //             "heading": 0,
+    //              "zoom": 18,
+    //              "center": pos,
+    //              "mapId": "fd96cc9ffed49009"
+    //             }
+    //         },
+    //         () => {
+    //           handleLocationError(true, infoWindow, map.getCenter());
+    //         }
+    //       );
+    //     } else {
+    //       // Browser doesn't support Geolocation
+    //       handleLocationError(false, infoWindow, map.getCenter());
+    //     }
+    //   });
+    // }
   
     webGLOverlayView.onAdd = () => {   
       // set up the scene
@@ -118,6 +183,7 @@ export default function Map() {
   useEffect(()=> {
     (async () => {        
       const map = await initMap();
+      // getLocation(map);
       console.log("XDDD", map)
       initWebGLOverlayView(map);    
     })();

@@ -55,7 +55,11 @@ export default function Signup({userDataHandler}) {
      <div className="content_container">
           <div className="form_container">
           <div className="form_header_container">
-            <h2 className="form_header">SideWorld</h2>
+            <h2 className="form_header">
+            
+            <img className="logo" width ="100px" src="sideworld_logo.png" />
+
+            </h2>
           </div>
 
           <div className="form_content_container">
