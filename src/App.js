@@ -1,23 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from "react";
+import Signup from './Components/Signup';
+import Map from "./Components/Map"
 
 function App() {
+  const [globalStage, setGlobalStage] = useState(0)
+  const [userData, setUserData] = useState(null)
+  Map()
+  useEffect(()=> {
+    console.log("DATAAAAAAA",userData )
+  },[userData])
+
+  const userDataHandler = (e) => {
+    console.log("EJEEEEM",e)
+    setUserData(e)
+    setGlobalStage(1)
+
+  };
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       {(globalStage == 0 && userData == null) && <Signup userDataHandler={userDataHandler}/>}
+       {globalStage == 1 &&<Map></Map>}
     </div>
   );
 }

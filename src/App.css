@@ -1,38 +1,249 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+html {
+  width: 100%;
+  height: 100%;
+  background: white;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.App{
+
+  display: flex;
+  direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
+
+.content_container {
+  width: 20rem;
+  height: 28rem;  
+}
+
+.form_container {
+  width: 100%;
+  height: 100%;
+  background-color: #370617;
+  box-shadow: 0 0 50px -20px #000;
+  border-radius: 2%;
+
+  overflow: hidden;
+}
+
+.form_header_container {
+  width: 100%;
+  height: 5%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
+
+  padding: 20px;
+  padding-bottom: 30px;
+  padding-top: 30px;
+
+  border-bottom: 1px solid transparent;
+  border-image: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566) 20;
+  background: #000;
+}
+
+.form_header {
+  display: inline-block;
+  font-size: 15px;
+  font-family: Bowlby One SC;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+
+  background: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.form_content_container {
+  width: 100%;
+  height: 100%;
+
+  float: left;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-top: 40px;
+}
+
+.form_content_inner_container {
+  width: 75%;
+  height: 100%;
+
+  float: left;
+
+}
+
+input {
+  width: 100%;
+  height: 40px;
+
+  padding-left: 10px;
+  margin-bottom: 20px;
+
+  background: #000;
+  font-family: Montserrat;
+  font-weight: 500;
+  color: #fff;
+  font-size: 12px;
+
+  border-bottom: 2px solid transparent;
+  border-top-left-radius: 2%;
+  border-top-right-radius: 2%;
+  border-image: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566) 1;
+}
+
+
+.button_container_one {
+  width: 100%;
+  height: 2rem;
+
+  background-image: linear-gradient(60deg, #e56d45, #f273bf,  #91b9ed);
+  color: #fff;
+  border-radius: 0.3rem;
+
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 20px;
+}
+
+.button_container_one button {
+  width: 100%;
+  height: 100%;
+  float: center;
+  
+  border-radius: 0.3rem;
+  background: transparent;
+  color: inherit;
+
+  font-family: Montserrat;
+  letter-spacing: 2px;
+  font-weight: 900;
+  font-size: 12px;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button_container_google {
+  width: 100%;
+  height: 2rem;
+
+  background-color: white;
+  border-radius: 0.3rem;
+  color: black;
+  padding: 0.2rem;
+
+
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 20px;
+}
+
+.button_container_google button {
+  width: 100%;
+  height: 100%;
+  float: center;
+
+  background: transparent;
+  color: inherit;
+
+  font-family: Montserrat;
+  letter-spacing: 2px;
+  font-weight: 900;
+  font-size: 12px;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup_button_container {
+  color: #fff;
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 2rem;
+}
+
+.signup_button {
+  width: 100%;
+  height: 100%;
+  float: center;
+
+  background: transparent;
+  color: inherit;
+
+  font-family: Montserrat;
+  letter-spacing: 2px;
+  font-weight: 900;
+  font-size: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.google_logo{
+  height: 100%;
+  margin-left: 0.3rem;
+}
+
+.signupText{
+  margin-left: 0.5rem;
+  color: #fce566;
+}
+
+.cropperContainer{
+  margin-bottom: 3rem;
+  color: white
+}
+
+.mapContainer{
+  position:fixed;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background:rgba(255,255,255,0.5);
+}
+
+#map{
+  width:100%;
+  height:100%;
+
 }
