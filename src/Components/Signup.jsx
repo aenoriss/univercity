@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FirebaseSignup, FirebaseSignin, FirebaseDB } from "../Utils/firebase";
+import { FirebaseSignup, FirebaseSignin, DBAddUserData, DBAddReverie } from "../Utils/firebase";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import Cropper from "./Cropper";
 
@@ -28,7 +28,7 @@ export default function Signup({userDataHandler}) {
   const submitHandler = () => {
     setStage(3)
     FirebaseSignup(email, password).then(() => {
-      FirebaseDB("users", { full_name: fullname }).then(() => {
+      DBAddUserData({ full_name: fullname }).then(() => {
         setStage(0);
         clearFields();
       });

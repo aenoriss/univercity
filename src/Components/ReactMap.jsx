@@ -1,19 +1,18 @@
-// import { useRef, useEffect } from "react";
+import {
+  withGoogleMap,
+  GoogleMap,
+  withScriptjs,
+  Marker,
+} from "react-google-maps";
 
-// export default MyMapComponent({
-//   center,
-//   zoom,
-// })
+export default function MapContainer() {
+  const center = { lat: 44, lng: -80 };
 
-// {
-//   const ref = useRef();
-
-//   useEffect(() => {
-//     new window.google.maps.Map(ref.current, {
-//       center,
-//       zoom,
-//     });
-//   });
-
-//   return <div ref={ref} id="map" />;
-// }
+  return withScriptjs(
+    withGoogleMap((props) => {
+      <GoogleMap zoom={10} center={center} mapContainerClassName="mapContainer">
+        <Marker position={{ lat: 44, lng: -80 }} />
+      </GoogleMap>;
+    })
+  );
+}

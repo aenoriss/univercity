@@ -5,16 +5,20 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.13.9",
     "@googlemaps/react-wrapper": "^1.1.35",
+    "@react-google-maps/api": "^2.17.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "fast-equals": "^4.0.3",
     "firebase": "^9.15.0",
     "google-maps": "^4.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-maps": "^9.4.5",
     "react-image-crop": "^10.0.9",
     "react-scripts": "5.0.1",
     "three": "^0.138.3",
+    "use-deep-compare-effect": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-export default function Map() {
   const apiOptions = {
     apiKey: "AIzaSyAo7v_SfcffemdotwZkN2cJ4iww4HIHuCQ",
   };
@@ -95,8 +94,6 @@ export default function Map() {
       directionalLight.position.set(0.5, -1, 0.5);
       scene.add(directionalLight);
 
-      console.log("SCENEE", scene);
-
       // load the model
       loader = new GLTFLoader();
       const source = "fantasy_town.glb";
@@ -160,17 +157,11 @@ export default function Map() {
     webGLOverlayView.setMap(map);
   }
 
-  useEffect(() => {
-    (async () => {
-      const map = await initMap();
-      // getLocation(map);
-      console.log("XDDD", map);
-      initWebGLOverlayView(map);
-    })();
-  });
-  return (
-    <div className="mapContainer">
-      <div id="map"></div>
-    </div>
-  );
+    export default async function startMap(){
+    const map = await initMap();
+    // getLocation(map);
+    initWebGLOverlayView(map);
 }
+      
+    
+
