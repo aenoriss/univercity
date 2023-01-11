@@ -12,17 +12,14 @@ export default function Signup({userDataHandler}) {
 
   const emailHandler = (e) => {
     setEmail(e.target.value);
-    console.log(email);
   };
 
   const passwordHandler = (e) => {
     setPassword(e.target.value);
-    console.log(password);
   };
 
   const fullNameHandler = (e) => {
     setFullname(e.target.value);
-    console.log(fullname);
   };
 
   const submitHandler = () => {
@@ -37,7 +34,6 @@ export default function Signup({userDataHandler}) {
 
   const loginHandler = () => {
     FirebaseSignin(email, password).then((result) => {
-      console.log(result)
       if(result != undefined){
         userDataHandler(result)
       }

@@ -15,7 +15,6 @@ function App() {
   const [userPos, setuserPos] = useState(null);
   const [reverieList, setReverieList] = useState(null);
 
-
   useEffect(() => {
     //Load Map
     //Retrieves userData from localStorage if exists.
@@ -28,7 +27,6 @@ function App() {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         // do something with the position data
-        // console.log(position.coords);
         setuserPos(position.coords)
       },
       (error) => {
@@ -43,16 +41,11 @@ function App() {
 
   useEffect(() => {
     if(globalStage == 1){
-      startMap();
+      startMap(reverieList);
     }
-  }, [globalStage]);
-
-  useEffect(() => {
-    console.log("reverieList", reverieList)
   }, [reverieList]);
 
   const userDataHandler = (e) => {
-    console.log("EJEEEEM", e);
     localStorage.setItem("userData", JSON.stringify(e));
     setUserData(e);
     setGlobalStage(1);

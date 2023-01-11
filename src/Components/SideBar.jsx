@@ -10,13 +10,10 @@ export default function Sidebar({userData, userPos}) {
 
   const titleHandler = (e) => {
     setTitle(e.target.value);
-    console.log(userPos)
-    console.log(title);
   };
 
   const descriptionHandler = (e) => {
     setDescription(e.target.value);
-    console.log(description);
   };
 
   const imageHandler = (e) => {
@@ -24,12 +21,9 @@ export default function Sidebar({userData, userPos}) {
   };
 
   const submitHandler = (e) => {
-    console.log("userPos", userPos)
     //Here is where Firebase is contacted
     FirebaseStorage(imgContent, userData).then((snapshot)=> {
-      console.log("snapshot", snapshot)
       DBAddReverie({user: userData.uid, content: {title, description, attachment:{img: snapshot}}, userPos: {lat: userPos.latitude, long: userPos.longitude}, time: Date.now()}).then((res) => {
-        console.log("reverie created")
           });
     })
   };

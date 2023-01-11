@@ -7,7 +7,7 @@ import {
   push,
   onValue,
 } from "firebase/database";
-import { getStorage, uploadBytes } from "firebase/storage";
+import { getStorage, uploadBytes, getDownloadURL} from "firebase/storage";
 import { ref as sRef } from "firebase/storage";
 import {
   getAuth,
@@ -94,5 +94,20 @@ export const FirebaseStorage = async (file, user) => {
   return await uploadBytes(imgRef, file).then((snapshot) => {
     console.log("snapshot", snapshot);
     return snapshot["ref"]["_location"];
+  });
+};
+
+export const getFile = async (file) => {
+  const storage = getStorage();
+  return getDownloadURL(sRef(storage, file))
+  .then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+
+    console.log("URL", url);
+
+    return url;
+  })
+  .catch((error) => {
+    // Handle any errors
   });
 };
