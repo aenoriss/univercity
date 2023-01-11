@@ -145,6 +145,21 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
         altitude: 120,
       };
 
+      // const latLngAltitude = { lat: -34.479363, lng:  -58.505597, altitude: 5 };
+      // const matrix2 = transformer.fromLatLngAltitude(latLngAltitude);
+      // const position = new THREE.Vector3().fromArray(matrix2);
+
+      
+      // const geometry = new THREE.BoxGeometry(100, 100, 100);
+      // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      // const cube = new THREE.Mesh(geometry,material);
+      // cube.position.copy(position);
+      // console.log("cube", cube)
+
+      // scene.add(cube);
+
+
+
       const matrix = transformer.fromLatLngAltitude(latLngAltitudeLiteral);
       camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix);
 

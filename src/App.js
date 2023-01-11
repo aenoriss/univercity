@@ -3,6 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Signup from "./Components/Signup";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import { DBRetrieveRev } from "./Utils/firebase";
 // import Map from "./Components/Map";
 import startMap from "./Components/VanillaMap";
 import Sidebar from "./Components/SideBar";
@@ -12,19 +13,8 @@ function App() {
   const [globalStage, setGlobalStage] = useState(0);
   const [userData, setUserData] = useState(null);
   const [userPos, setuserPos] = useState(null);
+  const [reverieList, setReverieList] = useState(null);
 
-  useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        // do something with the position data
-        // console.log(position.coords);
-        setuserPos(position.coords)
-      },
-      (error) => {
-        // handle the error
-      },
-      { enableHighAccuracy: true }
-    )})
 
   useEffect(() => {
     //Load Map
@@ -35,6 +25,20 @@ function App() {
       setGlobalStage(1);
     }
 
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        // do something with the position data
+        // console.log(position.coords);
+        setuserPos(position.coords)
+      },
+      (error) => {
+        // handle the error
+      },
+      { enableHighAccuracy: true }
+    )
+
+   DBRetrieveRev(setReverieList);
+
   }, []);
 
   useEffect(() => {
@@ -42,6 +46,10 @@ function App() {
       startMap();
     }
   }, [globalStage]);
+
+  useEffect(() => {
+    console.log("reverieList", reverieList)
+  }, [reverieList]);
 
   const userDataHandler = (e) => {
     console.log("EJEEEEM", e);
