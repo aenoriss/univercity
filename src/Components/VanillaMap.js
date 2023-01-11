@@ -136,7 +136,7 @@ function initWebGLOverlayView(map) {
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     const cube = new THREE.Mesh(geometry, material);
     cube.position.set(position.x, position.y, position.z);
-    scene.add(cube);
+    // scene.add(cube);
   };
 
   webGLOverlayView.onContextRestored = ({ gl }) => {
