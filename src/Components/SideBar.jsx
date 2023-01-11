@@ -52,7 +52,7 @@ export default function Sidebar({userData, userPos}) {
           accept="image/png, image/jpeg"
           onChange={imageHandler}
         />
-        {userPos && <h2>{userPos.latitude + " " + userPos.longitude}</h2>}
+        {/* {userPos && <h2>{userPos.latitude + " " + userPos.longitude}</h2>} */}
         <div className="button_container_one">
           <button onClick={submitHandler} id="createReverieButton" >
             Create
