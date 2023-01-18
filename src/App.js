@@ -1,19 +1,23 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Signup from "./Components/Signup";
+import Landing from "./Components/Landing";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { DBRetrieveRev } from "./Utils/firebase";
 // import Map from "./Components/Map";
 import startMap from "./Components/VanillaMap";
 import Sidebar from "./Components/SideBar";
+import { Marker } from "@react-google-maps/api";
 // import Map from "./Components/Map"
 
 function App() {
-  const [globalStage, setGlobalStage] = useState(0);
+  const [globalStage, setGlobalStage] = useState(-1);
   const [userData, setUserData] = useState(null);
   const [userPos, setuserPos] = useState(null);
   const [reverieList, setReverieList] = useState(null);
+  const [loadedMap, setLoadedMap] = useState(false);
+
 
   useEffect(() => {
     //Load Map
@@ -27,21 +31,29 @@ function App() {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         // do something with the position data
-        setuserPos(position.coords)
+        setuserPos(position.coords);
       },
       (error) => {
         // handle the error
       },
       { enableHighAccuracy: true }
-    )
-
-   DBRetrieveRev(setReverieList);
-
+    );
   }, []);
 
+
   useEffect(() => {
-    if(globalStage == 1){
+    if (globalStage == 1) {
+      DBRetrieveRev(setReverieList).then(() => {
+      });
+    }
+  }, [globalStage]);
+
+  useEffect(() => {
+    console.log("update", reverieList)
+
+    if(loadedMap == false && reverieList!=null){
       startMap(reverieList);
+      setLoadedMap(true);
     }
   }, [reverieList]);
 
@@ -52,8 +64,10 @@ function App() {
   };
 
   return (
-    
     <div className="App">
+       {globalStage == -1 && userData == null && (
+        <Landing stageHandler={setGlobalStage}/>
+      )}
       {globalStage == 0 && userData == null && (
         <Signup userDataHandler={userDataHandler} />
       )}
@@ -70,5 +84,3 @@ function App() {
 }
 
 export default App;
-
-

@@ -7,6 +7,13 @@ export default function Sidebar({userData, userPos}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imgContent, setImgContent] = useState("");
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setTimeout(function() {
+      setShow(true);
+    }, 3000);
+  }, []);
 
   const titleHandler = (e) => {
     setTitle(e.target.value);
@@ -29,9 +36,9 @@ export default function Sidebar({userData, userPos}) {
   };
 
   return (
-    <div className="sidebarContainer">
-      <h1>Create Reverie</h1>
-      <div className="">
+    <div className={`sidebarContainer ${show ? "show" : ""}`}>
+      <h1 className="reverie_form_title">Create Reverie</h1>
+      <div className="reverie_form_container">
         <input
           type="text"
           className="email"

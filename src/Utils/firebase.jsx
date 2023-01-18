@@ -7,12 +7,14 @@ import {
   push,
   onValue,
 } from "firebase/database";
-import { getStorage, uploadBytes, getDownloadURL} from "firebase/storage";
+import { getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ref as sRef } from "firebase/storage";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -76,9 +78,12 @@ export const DBAddReverie = async (data) => {
 };
 
 export const DBRetrieveRev = async (callback) => {
+  // console.log("xddd");
+
   const reverieRef = ref(db, "posts");
-  return await onValue(reverieRef, (snapshot) => {
+  onValue(reverieRef, (snapshot) => {
     const data = snapshot.val();
+    // console.log("xddd", data);
     callback(data);
   });
 };
@@ -100,14 +105,30 @@ export const FirebaseStorage = async (file, user) => {
 export const getFile = async (file) => {
   const storage = getStorage();
   return getDownloadURL(sRef(storage, file))
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
+    .then((url) => {
+      // `url` is the download URL for 'images/stars.jpg'
 
-    console.log("URL", url);
+      console.log("URL", url);
 
-    return url;
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
+      return url;
+    })
+    .catch((error) => {
+      // Handle any errors
+    });
 };
+
+export const signInWithGoogle = async() => {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  
+  return signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+
+    return user;
+  })
+}

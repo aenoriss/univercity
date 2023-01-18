@@ -46,7 +46,7 @@ function getLocation(map, markers) {
 
       for (const key in markers) {
         let img = document.createElement("img");
-        console.log("img", img)
+        // console.log("img", img)
         img.src =
           "https://firebasestorage.googleapis.com/v0/b/sideworld-93e4c.appspot.com/o/user%2FxWwGXF0nOmSTVXW0lOeZSWR5loE3%2Faenoris%20circle.png?alt=media&token=c2458960-3385-4b36-a0c4-16a5c09ac960";
         img.style.width = "500px";
@@ -55,18 +55,21 @@ function getLocation(map, markers) {
 
         getFile(markers[key]["content"]["attachment"]["img"]["path_"]).then((iconBase)=> {
 
-          console.log("iconBase", iconBase)
+          // console.log("iconBase", iconBase)
           let markerPos = {
             lat: pos.lat + (Math.random() - 0.5) * 0.01,
             lng: pos.lng + (Math.random() - 0.5) * 0.01,
           };
   
-          console.log("marketPos", markerPos);
+          // console.log("marketPos", markerPos);
           
           new google.maps.Marker({
             position: markerPos,
             map: map,
-            icon: iconBase ,
+            icon: {
+              url: iconBase,
+              scaledSize: new google.maps.Size(100, 100),
+            }
           });
         })
       }
