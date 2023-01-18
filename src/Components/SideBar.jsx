@@ -27,6 +27,10 @@ export default function Sidebar({userData, userPos}) {
     setImgContent(e.target.files[0]);
   };
 
+  const handleAr = (e) => {
+    window.open('https://ar-test-snowy.vercel.app/', '_blank', 'noreferrer');
+  };
+
   const submitHandler = (e) => {
     //Here is where Firebase is contacted
     FirebaseStorage(imgContent, userData).then((snapshot)=> {
@@ -37,6 +41,11 @@ export default function Sidebar({userData, userPos}) {
 
   return (
     <div className={`sidebarContainer ${show ? "show" : ""}`}>
+       <div className="button_container_four">
+          <button id="createReverieButton" onClick={handleAr}>
+            Enter Reverie
+          </button>
+        </div>
       <h1 className="reverie_form_title">Create Reverie</h1>
       <div className="reverie_form_container">
         <input
