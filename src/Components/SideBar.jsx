@@ -14,7 +14,7 @@ export default function Sidebar({ userData, userPos, reverieList }) {
   const [description, setDescription] = useState("");
   const [imgContent, setImgContent] = useState("");
   const [show, setShow] = useState(false);
-  const [panelStage, setPanelStage] = useState("create");
+  const [panelStage, setPanelStage] = useState("list");
   const [reverieDistance, setReverieDistance] = useState();
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function Sidebar({ userData, userPos, reverieList }) {
             <input
               type="text"
               className="email"
-              placeholder="Name"
+              placeholder="Title"
               value={title}
               onChange={titleHandler}
             />
