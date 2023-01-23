@@ -14,7 +14,7 @@ export default function Sidebar({ userData, userPos, reverieList }) {
   const [description, setDescription] = useState("");
   const [imgContent, setImgContent] = useState("");
   const [show, setShow] = useState(false);
-  const [panelStage, setPanelStage] = useState("list");
+  const [panelStage, setPanelStage] = useState("create");
   const [reverieDistance, setReverieDistance] = useState();
 
   useEffect(() => {
