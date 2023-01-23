@@ -38,7 +38,7 @@ export const FirebaseSignup = async (email, password) => {
     .then((userCredential) => {
       //Signed In
       user = userCredential.user;
-      console.log("USER CREDENTIALS", user);
+      // console.log("USER CREDENTIALS", user);
       return user;
     })
     .catch((error) => {
@@ -72,18 +72,19 @@ export const DBAddUserData = async (data) => {
 };
 
 export const DBAddReverie = async (data) => {
+  console.log("DATAAAA", data)
   const reverieListRef = ref(db, "posts");
   const newPostRef = push(reverieListRef);
   return set(newPostRef, data);
 };
 
 export const DBRetrieveRev = async (callback) => {
-  // console.log("xddd");
+  console.log("ASSADASD");
 
   const reverieRef = ref(db, "posts");
   onValue(reverieRef, (snapshot) => {
     const data = snapshot.val();
-    // console.log("xddd", data);
+    console.log("xddd", data);
     callback(data);
   });
 };
@@ -94,10 +95,10 @@ export const FirebaseStorage = async (file, user) => {
 
   //Create a reference to the image path
   const imgRef = sRef(storage, "user/" + user.uid + "/" + file.name);
-  console.log("IMG REF", imgRef["_location"]["path_"]);
+  // console.log("IMG REF", imgRef["_location"]["path_"]);
 
   return await uploadBytes(imgRef, file).then((snapshot) => {
-    console.log("snapshot", snapshot);
+    // console.log("snapshot", snapshot);
     return snapshot["ref"]["_location"];
   });
 };
@@ -108,7 +109,7 @@ export const getFile = async (file) => {
     .then((url) => {
       // `url` is the download URL for 'images/stars.jpg'
 
-      console.log("URL", url);
+      // console.log("URL", url);
 
       return url;
     })

@@ -22,73 +22,92 @@ const mapOptions = {
   ],
 };
 
-function getLocation(map, markers) {
+let markerArr = [];
+let userMarker;
+
+export function setMarkers(markers, map) {
   const google = window.google;
-  let infoWindow = new google.maps.InfoWindow();
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      let mapOptions = {
-        tilt: 0,
-        heading: 0,
-        zoom: 18,
-        center: pos,
-        mapId: "fd96cc9ffed49009",
-      };
-      // console.log("Latitude is :", position.coords.latitude);
-      // console.log("Longitude is :", position.coords.longitude);
-      infoWindow.setPosition(pos);
-      infoWindow.setContent("You're here!");
 
-      for (const key in markers) {
-        let img = document.createElement("img");
-        // console.log("img", img)
-        img.src =
-          "https://firebasestorage.googleapis.com/v0/b/sideworld-93e4c.appspot.com/o/user%2FxWwGXF0nOmSTVXW0lOeZSWR5loE3%2Faenoris%20circle.png?alt=media&token=c2458960-3385-4b36-a0c4-16a5c09ac960";
-        img.style.width = "500px";
-        img.style.height = "500px";
-      
+  //Clean Map
+  markerArr.forEach((marker) => {
+    marker.setMap(null)
+    markerArr = [];
+  })
 
-        getFile(markers[key]["content"]["attachment"]["img"]["path_"]).then((iconBase)=> {
+  for (const key in markers) {
+    let img = document.createElement("img");
+    img.src =
+      "https://firebasestorage.googleapis.com/v0/b/sideworld-93e4c.appspot.com/o/user%2FxWwGXF0nOmSTVXW0lOeZSWR5loE3%2Faenoris%20circle.png?alt=media&token=c2458960-3385-4b36-a0c4-16a5c09ac960";
+    img.style.width = "500px";
+    img.style.height = "500px";
 
-          // console.log("iconBase", iconBase)
-          let markerPos = {
-            lat: pos.lat + (Math.random() - 0.5) * 0.01,
-            lng: pos.lng + (Math.random() - 0.5) * 0.01,
-          };
-  
-          // console.log("marketPos", markerPos);
-          
-          new google.maps.Marker({
-            position: markerPos,
-            map: map,
-            icon: {
-              url: iconBase,
-              scaledSize: new google.maps.Size(100, 100),
-            }
-          });
-        })
+    getFile(markers[key]["content"]["attachment"]["img"]["path_"]).then(
+      (iconBase) => {
+        let markerPos = {
+          lat: markers[key]["userPos"].lat,
+          lng: markers[key]["userPos"].long,
+        };
+        let marker = new google.maps.Marker({
+          position: markerPos,
+          map: map,
+          icon: {
+            url: iconBase,
+            scaledSize: new google.maps.Size(100, 100),
+          },
+        });
+        markerArr.push(marker);
       }
-
-      infoWindow.open(map);
-    });
+    );
   }
+
+  //Populate Map
+  markerArr.forEach((marker) => {
+    marker.setMap(map)
+  })
+}
+
+export function getMapLocation(position, map) {
+  if(userMarker != undefined){
+    userMarker.close()
+  }
+  
+  const google = window.google;
+  userMarker = new google.maps.InfoWindow();
+
+  // Try HTML5 geolocation.
+  const pos = {
+    lat: position.latitude,
+    lng: position.longitude,
+  };
+
+  //Sets user location
+  userMarker.setPosition(pos);
+  userMarker.setContent("You're here!");
+
+  //Centers map on user location
+  userMarker.open(map);
+
+  let mapOptions = {
+    tilt: 0,
+    heading: 0,
+    zoom: 18,
+    center: pos,
+    mapId: "fd96cc9ffed49009",
+  };
+
   return mapOptions;
 }
 
-async function initMap() {
+export async function initMap() {
   const mapDiv = document.getElementById("map");
   const apiLoader = new Loader(apiOptions);
   await apiLoader.load();
   const google = window.google;
+
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
-function initWebGLOverlayView(map) {
+export function initWebGLOverlayView(map) {
   let scene, renderer, camera, loader;
   const google = window.google;
   const webGLOverlayView = new google.maps.WebGLOverlayView();
@@ -192,11 +211,4 @@ function initWebGLOverlayView(map) {
     renderer.resetState();
   };
   webGLOverlayView.setMap(map);
-}
-
-export default async function startMap(markers) {
-  console.log("MARKERS", markers);
-  const map = await initMap();
-  getLocation(map, markers);
-  initWebGLOverlayView(map);
 }

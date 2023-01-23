@@ -375,7 +375,7 @@ input {
   border-top-right-radius: 2rem;
   z-index: 100;
   width: 100%;
-  height:55%;
+  max-height: 25rem;
   bottom: 0;
   transform: translateY(100%);
   transition: transform 2s ease-in-out;
@@ -386,6 +386,10 @@ input {
   align-items: center;
   position: absolute;
   background-color: white;
+  padding: 1rem;
+  padding-top: rem;
+  padding-bottom: 2rem;
+
 }
 
 .sidebarContainer.show {
@@ -396,7 +400,7 @@ input {
   font-size: 1.5rem;
   font-weight: 900;
   margin-bottom: 1rem;
-  background: linear-gradient(60deg, #e56d45, #f273bf, #91b9ed);
+  background: linear-gradient(60deg, #e56d45, #f273bf);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   mix-blend-mode: multiply;
@@ -411,3 +415,91 @@ input {
 .reverie_form_container{
   width:70%
 }
+
+.create_reverie{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.reverieList{
+  width: 100%;
+  overflow: scroll;
+}
+
+.reverie_list_item{
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  text-align: left;
+  margin-top: 1rem;
+  width: 100%;
+  height: 5rem;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  background-color: white;
+  border-bottom: 0.5px solid transparent;
+  border-image: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566) 1;
+  overflow: hidden;
+}
+
+.reverie_title{
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(25deg, #e56d45, #f273bf,#91b9ed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  mix-blend-mode: multiply;
+}
+
+.reverie_text_section{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.reverie_button_section{
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reverie_button_container{
+  width: 6rem;
+  background-image: linear-gradient(60deg, #e56d45, #f273bf,  #91b9ed);
+  border-radius: 0.15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reverie_button{
+  height: 2rem;
+  background: transparent;
+  color: white;
+  background-color: linear-gradient(25deg, #e56d45, #f273bf,#91b9ed);
+}
+
+.reverie_header{
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.distanceTag{
+  color: lightslategray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 0.5rem;
+  margin-top: -0.3rem;
+}
+
