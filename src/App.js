@@ -4,26 +4,24 @@ import { useEffect, useState, useRef } from "react";
 import Signup from "./Components/Signup";
 import Landing from "./Components/Landing";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
-import { DBRetrieveRev } from "./Utils/firebase";
 // import Map from "./Components/Map";
 import {
   getMapLocation,
   initMap,
   setMarkers,
   initWebGLOverlayView,
+  closeMap
 } from "./Components/VanillaMap";
 import Sidebar from "./Components/SideBar";
-import { Marker } from "@react-google-maps/api";
+// import ARDisplay from "./Components/ARDisplay";
+import ARDisplay from "./Components/ARDisplay";
+
 // import Map from "./Components/Map"
 
 function App() {
   const [globalStage, setGlobalStage] = useState(-1);
   const [userData, setUserData] = useState(null);
-  const [userPos, setuserPos] = useState(null);
-  const [reverieList, setReverieList] = useState();
-  const [loadedMap, setLoadedMap] = useState(false);
-  const [map, setMap] = useState(null);
-  const [distanceArray, setDistanceArray] = useState(null);
+  const [selectedReverie, setSelectedReverie] = useState(null);
 
   useEffect(() => {
     //Load Map
@@ -36,43 +34,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (loadedMap == true && reverieList != undefined) {
-      setMarkers(reverieList, map);
+    console.log("REACHEEEED",selectedReverie);
+    if(selectedReverie){
+      setGlobalStage(2);
+      closeMap()
     }
-  }, [reverieList]);
+  }, [selectedReverie]);
 
-  useEffect(() => {
-    if (globalStage == 1) {
-      DBRetrieveRev(setReverieList);
-      if (loadedMap == false) {
-        initMap().then((map) => {
-          console.log("apiLoader", map);
-
-          setMap(map);
-          if (navigator.geolocation) {
-            //Start tracking user's location
-
-            navigator.geolocation.watchPosition(
-              (position) => {
-                // do something with the position data
-                setuserPos({
-                  lat: position.coords["latitude"],
-                  long: position.coords["longitude"],
-                });
-                getMapLocation(position.coords, map);
-                initWebGLOverlayView(map);
-              },
-              (error) => {
-                // handle the error
-              },
-              { enableHighAccuracy: true }
-            );
-          }
-        });
-        setLoadedMap(true);
-      }
-    }
-  }, [globalStage]);
 
   const userDataHandler = (e) => {
     localStorage.setItem("userData", JSON.stringify(e));
@@ -96,8 +64,10 @@ function App() {
         </div>
       )}
       {globalStage == 1 && (
-        <Sidebar className="sidebar" userData={userData} userPos={userPos} reverieList={reverieList} />
+        <Sidebar className="sidebar" userData={userData} selectedReverie={setSelectedReverie} globalStage={setGlobalStage}/>
       )}
+
+      {globalStage == 2 && <ARDisplay className="ARDisplay" selectedReverie={selectedReverie} />}
     </div>
   );
 }

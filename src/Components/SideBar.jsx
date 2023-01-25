@@ -8,14 +8,26 @@ import {
 } from "../Utils/firebase";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import Cropper from "./Cropper";
+import { DBRetrieveRev } from "../Utils/firebase";
+import {
+  getMapLocation,
+  initMap,
+  setMarkers,
+  initWebGLOverlayView,
+  closeMap
+} from "./VanillaMap";
 
-export default function Sidebar({ userData, userPos, reverieList }) {
+export default function Sidebar({ userData, selectedReverie }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imgContent, setImgContent] = useState("");
   const [show, setShow] = useState(false);
   const [panelStage, setPanelStage] = useState("list");
   const [reverieDistance, setReverieDistance] = useState();
+  const [userPos, setuserPos] = useState(null);
+  const [reverieList, setReverieList] = useState();
+  const [loadedMap, setLoadedMap] = useState(false);
+  const [map, setMap] = useState(null);
 
   useEffect(() => {
     setTimeout(function () {
@@ -24,7 +36,48 @@ export default function Sidebar({ userData, userPos, reverieList }) {
   }, []);
 
   useEffect(() => {
-    console.log("reverieList", reverieList);
+    if (loadedMap == true && reverieList != undefined) {
+      setMarkers(reverieList, map);
+    }
+  }, [reverieList]);
+
+  useEffect(() => {
+    console.log("SIDEBAR RENDERED");
+  });
+
+  useEffect(() => {
+      console.log("asdasdadssadasdasdsasdasdasdasdasd")
+      DBRetrieveRev(setReverieList);
+      if (loadedMap == false) {
+        initMap().then((map) => {
+          console.log("apiLoader", map);
+          setMap(map);
+          initWebGLOverlayView(map);
+
+          if (navigator.geolocation) {
+            //Start tracking user's location
+
+            navigator.geolocation.watchPosition(
+              (position) => {
+                // do something with the position data
+                setuserPos({
+                  lat: position.coords["latitude"],
+                  long: position.coords["longitude"],
+                });
+                getMapLocation(position.coords, map);
+              },
+              (error) => {
+                // handle the error
+              },
+              { enableHighAccuracy: false }
+            );
+          }
+        });
+        setLoadedMap(true);
+      }
+  }, []);
+
+  useEffect(() => {
     //Calculate distance from user to each reverie
     if ((userPos != null) & (reverieList != null)) {
       let reverieArr = [];
@@ -38,13 +91,11 @@ export default function Sidebar({ userData, userPos, reverieList }) {
           reverieArr.push(reverieList[key]);
         }
       }
+      console.log("reverieList", reverieArr);
+
       setReverieDistance(reverieArr);
     }
   }, [userPos, reverieList]);
-
-  useEffect(() => {
-    console.log("reverieDistance", reverieDistance);
-  }, [reverieDistance]);
 
   const distance = (from, to) => {
     // Computational optimization for no change.
@@ -78,9 +129,14 @@ export default function Sidebar({ userData, userPos, reverieList }) {
     setImgContent(e.target.files[0]);
   };
 
-  const handleAr = (e) => {
-    window.open("https://ar-test-snowy.vercel.app/", "_blank", "noreferrer");
+  const ARHandler = (reverie) => {
+    console.log("REVERKNDASD", reverie)
+    selectedReverie(reverie);
   };
+
+  // const handleAr = (e) => {
+  //   window.open("https://ar-test-snowy.vercel.app/", "_blank", "noreferrer");
+  // };
 
   const submitHandler = (e) => {
     //Here is where Firebase is contacted
@@ -101,7 +157,7 @@ export default function Sidebar({ userData, userPos, reverieList }) {
           <h1 className="reverie_form_title">Reveries</h1>
           <p>Active Reveries near you! 🌠</p>
           {reverieDistance &&
-            Object.values(reverieDistance).map((reverie) => {
+            reverieDistance.map((reverie) => {
               return (
                 <div className="reverie_list_item">
                   <div className="reverie_text_section">
@@ -120,7 +176,7 @@ export default function Sidebar({ userData, userPos, reverieList }) {
 
                   <div className="reverie_button_section">
                     <div className="reverie_button_container">
-                      <button className="reverie_button">Enter</button>
+                      <button className="reverie_button" onClick={()=> ARHandler(reverie)}>Enter</button>
                     </div>
                   </div>
                 </div>

@@ -1,4 +1,5 @@
 import { Loader } from "@googlemaps/js-api-loader";
+import { MAP_PANE } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -24,6 +25,7 @@ const mapOptions = {
 
 let markerArr = [];
 let userMarker;
+let webGLOverlayView;
 
 export function setMarkers(markers, map) {
   const google = window.google;
@@ -107,10 +109,17 @@ export async function initMap() {
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
+export async function closeMap() {
+  webGLOverlayView.setMap(null)
+  const mapDiv = document.getElementById("map");
+  mapDiv.innerHTML = "";
+
+}
+
 export function initWebGLOverlayView(map) {
   let scene, renderer, camera, loader;
   const google = window.google;
-  const webGLOverlayView = new google.maps.WebGLOverlayView();
+  webGLOverlayView = new google.maps.WebGLOverlayView();
 
   const customStyled = [
     {
@@ -193,6 +202,12 @@ export function initWebGLOverlayView(map) {
     };
   };
 
+  webGLOverlayView.onRemove = () => {
+    // Remove all intermediate objects.
+    console.log("xzczxczcz")
+  }
+
+
   webGLOverlayView.onDraw = ({ gl, transformer }) => {
     // update camera matrix to ensure the model is georeferenced correctly on the map
     const latLngAltitudeLiteral = {
@@ -201,6 +216,7 @@ export function initWebGLOverlayView(map) {
       altitude: 120,
     };
 
+   
     const matrix = transformer.fromLatLngAltitude(latLngAltitudeLiteral);
     camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix);
 
