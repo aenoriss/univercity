@@ -17,8 +17,6 @@ export default function ARDisplay({ selectedReverie }) {
       setShow(true);
     }, 3000);
 
-    document.getElementById("ARButtonId").click();
-
     getFile(selectedReverie["content"]["attachment"]["img"]["path_"]).then(
       (iconBase) => {
         console.log("iconBase", iconBase);
@@ -39,6 +37,7 @@ export default function ARDisplay({ selectedReverie }) {
 
   useEffect(() => {
     console.log("textureasdasdasd", texture);
+    document.getElementById("ARButtonId").click();
   }, [texture]);
 
   return (
