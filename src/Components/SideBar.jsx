@@ -3,6 +3,7 @@ import {
   FirebaseSignup,
   FirebaseSignin,
   FirebaseDB,
+  getFile,
   DBAddReverie,
   FirebaseStorage,
 } from "../Utils/firebase";
@@ -14,7 +15,7 @@ import {
   initMap,
   setMarkers,
   initWebGLOverlayView,
-  closeMap
+  closeMap,
 } from "./VanillaMap";
 
 export default function Sidebar({ userData, selectedReverie }) {
@@ -46,35 +47,35 @@ export default function Sidebar({ userData, selectedReverie }) {
   });
 
   useEffect(() => {
-      console.log("asdasdadssadasdasdsasdasdasdasdasd")
-      DBRetrieveRev(setReverieList);
-      if (loadedMap == false) {
-        initMap().then((map) => {
-          console.log("apiLoader", map);
-          setMap(map);
-          initWebGLOverlayView(map);
+    console.log("asdasdadssadasdasdsasdasdasdasdasd");
+    DBRetrieveRev(setReverieList);
+    if (loadedMap == false) {
+      initMap().then((map) => {
+        console.log("apiLoader", map);
+        setMap(map);
+        initWebGLOverlayView(map);
 
-          if (navigator.geolocation) {
-            //Start tracking user's location
+        if (navigator.geolocation) {
+          //Start tracking user's location
 
-            navigator.geolocation.watchPosition(
-              (position) => {
-                // do something with the position data
-                setuserPos({
-                  lat: position.coords["latitude"],
-                  long: position.coords["longitude"],
-                });
-                getMapLocation(position.coords, map);
-              },
-              (error) => {
-                // handle the error
-              },
-              { enableHighAccuracy: false }
-            );
-          }
-        });
-        setLoadedMap(true);
-      }
+          navigator.geolocation.watchPosition(
+            (position) => {
+              // do something with the position data
+              setuserPos({
+                lat: position.coords["latitude"],
+                long: position.coords["longitude"],
+              });
+              getMapLocation(position.coords, map);
+            },
+            (error) => {
+              // handle the error
+            },
+            { enableHighAccuracy: false }
+          );
+        }
+      });
+      setLoadedMap(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -82,10 +83,10 @@ export default function Sidebar({ userData, selectedReverie }) {
     if ((userPos != null) & (reverieList != null)) {
       let reverieArr = [];
       for (const key in reverieList) {
-        console.log(distance(userPos, reverieList[key].userPos));
-        if (distance(userPos, reverieList[key].userPos) < 50) {
-
-          let distanceValue = distance(userPos, reverieList[key].userPos);
+        console.log(distance(userPos, reverieList[key].location));
+        if (distance(userPos, reverieList[key].location) < 50) {
+          console.log("locationnnn", reverieList[key]);
+          let distanceValue = distance(userPos, reverieList[key].location);
 
           reverieList[key].distance = Math.round(distanceValue * 100) / 100;
           reverieArr.push(reverieList[key]);
@@ -93,12 +94,21 @@ export default function Sidebar({ userData, selectedReverie }) {
       }
       console.log("reverieList", reverieArr);
 
+      reverieDistance && reverieDistance.map((reverie) => {
+        getFile(reverie["content"]["attachment"]["img"]["path_"]).then(
+          (img) => {
+            reverie["content"]["attachment"]["img"].file = img;
+          })
+        })
+
       setReverieDistance(reverieArr);
     }
   }, [userPos, reverieList]);
 
   const distance = (from, to) => {
     // Computational optimization for no change.
+
+    console.log("asadasd", from, to);
 
     if (from.lat === to.lat && from.long === to.long) {
       return 0;
@@ -130,8 +140,14 @@ export default function Sidebar({ userData, selectedReverie }) {
   };
 
   const ARHandler = (reverie) => {
-    console.log("REVERKNDASD", reverie)
+    console.log("REVERKNDASD", reverie);
     selectedReverie(reverie);
+  };
+
+  const tabHandler = (tab) => {
+    let tabId = tab.target.id;
+    console.log("tabId",tabId)
+    setPanelStage(tabId)
   };
 
   // const handleAr = (e) => {
@@ -144,79 +160,94 @@ export default function Sidebar({ userData, selectedReverie }) {
       DBAddReverie({
         user: userData.uid,
         content: { title, description, attachment: { img: snapshot } },
-        userPos: { lat: userPos.lat, long: userPos.long },
+        location: { lat: userPos.lat, long: userPos.long },
+        replies: [
+          { text: "Hello World", date: Date.now() },
+          { text: "Reply 1", date: Date.now() },
+          { text: "Reply 1", date: Date.now() },
+        ],
         time: Date.now(),
       }).then((res) => {});
     });
   };
 
+
   return (
     <div className={`sidebarContainer ${show ? "show" : ""}`}>
-      {panelStage == "list" && (
-        <div className="reverieList">
-          <h1 className="reverie_form_title">Reveries</h1>
-          <p>Active Reveries near you! 🌠</p>
-          {reverieDistance &&
-            reverieDistance.map((reverie) => {
-              return (
-                <div className="reverie_list_item">
-                  <div className="reverie_text_section">
-                    <div className="reverie_header">
-                      <div className="reverie_title">
-                        {reverie["content"].title}
-                      </div>
-                      <div className="distanceTag">
-                        {reverie.distance}m
+      <div className="tabContainer">
+        <div id= "list" onClick={tabHandler} className={`tab tabLeft ${panelStage == "list" ? "activeTab" : ""}`}>Nearby</div>
+        <div id= "create" onClick={tabHandler} className={`tab tabRight ${panelStage == "create" ? "activeTab" : ""}`}>Create</div>
+      </div>
+      <div className="sidebarPanel">
+        {panelStage == "list" && (
+          <div className="reverieList_main">
+            <div className="reverie_form_header">
+              <h1 className="reverie_form_title">Reveries</h1>
+              <p>Dreaming around 🌠</p>
+            </div>
+            <div className="reverieList_list">
+            {reverieDistance &&
+              reverieDistance.map((reverie) => {
+                return (
+                  <div className="reverie_list_item"  onClick={() => ARHandler(reverie)}>
+                    <div className="reverie_text_section bg-image" style={{ backgroundImage: `url(${reverie["content"]["attachment"]["img"].file})`}}>
+                      <div className="reverie_header">
+                        <div className="reverie_title">
+                          {reverie["content"].title}
+                        </div>
+                        <div className="distanceTag">{reverie.distance}m</div>
                       </div>
                     </div>
-                    <div className="reverie_description">
-                      {reverie["content"].description}
-                    </div>
-                  </div>
 
-                  <div className="reverie_button_section">
-                    <div className="reverie_button_container">
-                      <button className="reverie_button" onClick={()=> ARHandler(reverie)}>Enter</button>
+                    <div className="reverie_button_section">
+                      <div className="reverie_button_container">
+                        <button
+                          className="reverie_button"
+                        >
+                          Enter
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                )})}
         </div>
-      )}
-      {panelStage == "create" && (
-        <div className="create_reverie">
-          <h1 className="reverie_form_title">Create Reverie</h1>
-          <div className="reverie_form_container">
-            <input
-              type="text"
-              className="email"
-              placeholder="Title"
-              value={title}
-              onChange={titleHandler}
-            />
-            <input
-              type="text"
-              className="email"
-              placeholder="Content"
-              value={description}
-              onChange={descriptionHandler}
-            />
-            <input
-              type="file"
-              id="docpicker"
-              accept="image/png, image/jpeg"
-              onChange={imageHandler}
-            />
-            {/* {userPos && <h2>{userPos.latitude + " " + userPos.longitude}</h2>} */}
-            <div className="button_container_one">
-              <button onClick={submitHandler} id="createReverieButton">
-                Create
-              </button>
+        </div>)}
+
+        {panelStage == "create" && (
+          <div className="create_reverie">
+            <h1 className="reverie_form_title">Create Reverie</h1>
+            <div className="reverie_form_container">
+              <input
+                type="text"
+                className="email"
+                placeholder="Title"
+                value={title}
+                onChange={titleHandler}
+              />
+              <input
+                type="text"
+                className="email"
+                placeholder="Content"
+                value={description}
+                onChange={descriptionHandler}
+              />
+              
+              <input
+                type="file"
+                id="docpicker"
+                accept="image/png, image/jpeg"
+                onChange={imageHandler}
+              />
+              {/* {userPos && <h2>{userPos.latitude + " " + userPos.longitude}</h2>} */}
+              <div className="button_container_one">
+                <button onClick={submitHandler} id="createReverieButton">
+                  Create
+                </button>
+              </div>
             </div>
           </div>
+        )}
+
+        </div>
         </div>
       )}
-    </div>
-  );
-}

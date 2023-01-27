@@ -1,18 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import {
-  VRButton,
-  ARButton,
-  Controllers,
-  Hands,
-  XRButton,
-  XRProvider,
-} from "@react-three/xr";
+import { XRButton } from "@react-three/xr";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { XR, useXR } from "@react-three/xr";
 import { getFile } from "../Utils/firebase";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
-import { DataTexture } from "three";
-import axios from "axios";
+import ReplyBox from "./ReplyBox";
 
 export default function ARDisplay({ selectedReverie }) {
   const [show, setShow] = useState(false);
@@ -39,11 +31,11 @@ export default function ARDisplay({ selectedReverie }) {
     if (img) {
       const textureLoader = new TextureLoader();
       textureLoader.load(img, function (texture) {
+        texture.needsUpdate = true;
         setTexture(texture);
       });
     }
   }, [img]);
-
 
   useEffect(() => {
     console.log("textureasdasdasd", texture);
@@ -51,36 +43,61 @@ export default function ARDisplay({ selectedReverie }) {
 
   return (
     <>
-      <div className={`sidebarContainer ${show ? "show" : ""}`}>
-        <div className="reverieList">
-          <h1>{selectedReverie["content"].title}</h1>
-          <p>{selectedReverie["content"].description}</p>
-          <XRButton
-            className="ARButtonStyle"
-            id="ARButtonId"
-            mode={"AR"}
-            sessionInit={{
-              optionalFeatures: ["local-floor", "dom-overlay"],
-              domOverlay: { root: document.body },
-            }}
-            enterOnly={true}
-            exitOnly={false}
-            onError={(error) => console.log(error)}
-          >
-            <div className="ARTag">Reverie Visualization</div>
-          </XRButton>
-
-          {/* <ARButton id="ARButtonId" className="ARButtonStyle">Open Reverie</ARButton> */}
-        </div>
+      <div className="reverie_info_panel">
+        <h1>{selectedReverie["content"].title}</h1>
+        <p>{selectedReverie["content"].description}</p>
       </div>
 
-      <Canvas>
+      <div className="reverie_reply_panel">
+        <ReplyBox selectedReverie={selectedReverie} />
+      </div>
 
+      <div>
+        <XRButton
+          className="ARButtonStyle"
+          id="ARButtonId"
+          mode={"AR"}
+          sessionInit={{
+            optionalFeatures: ["local-floor", "dom-overlay"],
+            domOverlay: { root: document.body },
+          }}
+          enterOnly={true}
+          exitOnly={false}
+          onError={(error) => console.log(error)}
+        >
+          <div className="ARTag"> </div>
+        </XRButton>
+
+        {/* <ARButton id="ARButtonId" className="ARButtonStyle">Open Reverie</ARButton> */}
+      </div>
+
+      <XRButton
+        className="ARButtonStyle"
+        id="ARButtonId"
+        mode={"AR"}
+        sessionInit={{
+          optionalFeatures: ["local-floor", "dom-overlay"],
+          domOverlay: { root: document.body },
+        }}
+        enterOnly={true}
+        exitOnly={false}
+        onError={(error) => console.log(error)}
+      >
+        <div className="ARTag"> </div>
+      </XRButton>
+
+      <Canvas>
         <XR>
           {texture && (
             <mesh position={[0, 2, -2]}>
-              <planeBufferGeometry args={[2, 2]} />
-              <meshBasicMaterial map={texture} />
+              <ambientLight intensity={0.1} />
+              <planeBufferGeometry
+                args={[
+                  texture["source"]["data"].naturalWidth / 1000,
+                  texture["source"]["data"].naturalHeight / 1000,
+                ]}
+              />
+              <meshBasicMaterial map={texture} transparent={false} />
             </mesh>
           )}
         </XR>

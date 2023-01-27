@@ -374,6 +374,7 @@ input {
 .sidebarContainer{
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
+  font-weight:500;
   z-index: 100;
   width: 100%;
   max-height: 25rem;
@@ -382,29 +383,81 @@ input {
   transition: transform 2s ease-in-out;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
+  align-items: left;
   position: absolute;
-  background-color: white;
-  padding: 1rem;
-  padding-top: rem;
-  padding-bottom: 2rem;
+}
 
+.sidebarPanel{
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 0.3rem;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  overflow: scroll;
 }
 
 .sidebarContainer.show {
   transform: translateY(0);
 }
 
+.tabContainer{
+  width:80%;
+  display: flex;
+  direction: row;
+  align-items: center;
+}
+
+.tab{
+  display: flex;
+  direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 2.5rem;
+  background-color: white;
+  border-bottom: 0.5px solid transparent;
+  border-image: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566) 1;
+  overflow: hidden;
+  font-weight:500;
+  border-radius: 0.3rem;
+  border-bottom-right-radius: 0rem;
+  border-bottom-left-radius: 0rem;
+}
+
+.tabLeft{
+  border-top-right-radius: 0rem;
+  margin-left:0.1rem;
+}
+.tabRight{
+  border-top-left-radius: 0rem;
+}
+
+.activeTab{
+  background: linear-gradient(60deg, #e56d45, #f273bf);
+  color: white;
+}
+
 .reverie_form_title{
   font-size: 1.5rem;
   font-weight: 900;
-  margin-bottom: 1rem;
-  background: linear-gradient(60deg, #e56d45, #f273bf);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(10deg, #e56d45, #f273bf);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   mix-blend-mode: multiply;
+}
+
+.reverie_form_header{
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
 }
 
 .mapContainer{
@@ -415,43 +468,56 @@ input {
 }
 
 .reverie_form_container{
-  width:70%
+  width:100%
 }
 
 .create_reverie{
   width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: left;
+  text-align: left;
+  align-items: left;
+}
+
+.reverieList_main{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  text-align: center;
   align-items: center;
 }
 
-.reverieList{
+.reverieList_list{
   width: 100%;
-  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .reverie_list_item{
   display: flex;
-  flex-direction: row;
-  justify-content: left;
+  flex-direction: column;
+  justify-content: bottom;
+  align-items: left; 
   text-align: left;
+  margin: 0.5rem;
   margin-top: 1rem;
-  width: 100%;
-  height: 5rem;
-  padding: 1rem;
-  padding-bottom: 2rem;
+  width: 96%;
+  height: 12rem;
   background-color: white;
-  border-bottom: 0.5px solid transparent;
-  border-image: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566) 1;
+  border-bottom: 2px solid rgba(242, 115, 191, 0.5);
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.2);
+  border-radius: 1rem;
   overflow: hidden;
+  /* border-image: -webkit-linear-gradient(25deg, #e56d45, #f273bf, #91b9ed, #81efaa, #fce566) 1; */
+  opacity: 0.8;
+
 }
 
 .reverie_title{
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 900;
-  margin-bottom: 1rem;
   background: linear-gradient(25deg, #e56d45, #f273bf,#91b9ed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -459,22 +525,25 @@ input {
 }
 
 .reverie_text_section{
-  width: 60%;
+  height: 75%;
+  padding: 0.6rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
 }
 
 .reverie_button_section{
+  height:25%;
   display: flex;
-  width: 50%;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
 .reverie_button_container{
-  width: 6rem;
+  height: 100%;
+  width: 100%;
   background-image: linear-gradient(60deg, #e56d45, #f273bf,  #91b9ed);
   border-radius: 0.15rem;
   display: flex;
@@ -484,16 +553,20 @@ input {
 }
 
 .reverie_button{
-  height: 2rem;
   background: transparent;
   color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
   background-color: linear-gradient(25deg, #e56d45, #f273bf,#91b9ed);
 }
 
 .reverie_header{
   display: flex;
-  flex-direction: row;
+  width: 100%;
+  flex-direction: column;
   justify-content: left;
+  align-items: left;
+  text-align: left;
 }
 
 .distanceTag{
@@ -501,8 +574,6 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 0.5rem;
-  margin-top: -0.3rem;
 }
 
 #ARCanvas{
@@ -520,6 +591,61 @@ input {
 }
 
 .ARTag{
-  color: white; background-color: #36454F;}
+  color: white; background-color: white;}
+
+.reverie_reply_list{
+  display: flex;
+  direction: column;
+  padding: 1rem;
+}
+
+.reverie_reply_item{
+  display: flex;
+  direction: column;
+  height: 5rem;
+}
+
+.bg-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+.reverie_info_panel{
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 0.3rem;
+  z-index: 100;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  max-height: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  overflow: scroll;
+}
+
+.reverie_reply_panel{
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 0.3rem;
+  z-index: 100;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  position: absolute;
+  bottom: 0;
+  max-height: 15rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  overflow: scroll;
+  
+}
+
 
 

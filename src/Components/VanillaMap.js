@@ -46,8 +46,8 @@ export function setMarkers(markers, map) {
     getFile(markers[key]["content"]["attachment"]["img"]["path_"]).then(
       (iconBase) => {
         let markerPos = {
-          lat: markers[key]["userPos"].lat,
-          lng: markers[key]["userPos"].long,
+          lat: markers[key]["location"].lat,
+          lng: markers[key]["location"].long,
         };
         let marker = new google.maps.Marker({
           position: markerPos,
