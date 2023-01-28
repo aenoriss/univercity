@@ -43,14 +43,22 @@ export default function ARDisplay({ selectedReverie }) {
 
   useEffect(() => {
     console.log("textureasdasdasd", texture);
-    
   }, [texture]);
 
   return (
     <>
       <div className="reverie_info_panel">
-        <h1>{selectedReverie["content"].title}</h1>
-        <p>{selectedReverie["content"].description}</p>
+        <div className="reverie_info_panel_logo">
+          <img src="sideworld_logo.jpg" width="80px" />
+        </div>
+        <div className="reverie_info_panel_content">
+        <h1 className="reverie_info_panel_content_title">
+            {selectedReverie["content"].title}
+          </h1>
+          <p className="reverie_info_description">
+            {selectedReverie["content"].description}
+          </p>
+        </div>
       </div>
 
       <div className="reverie_reply_panel">
@@ -72,27 +80,10 @@ export default function ARDisplay({ selectedReverie }) {
         >
           <div className="ARTag"> </div>
         </XRButton>
-
-        {/* <ARButton id="ARButtonId" className="ARButtonStyle">Open Reverie</ARButton> */}
       </div>
 
-      <XRButton
-        className="ARButtonStyle"
-        id="ARButtonId"
-        mode={"AR"}
-        sessionInit={{
-          optionalFeatures: ["local-floor", "dom-overlay"],
-          domOverlay: { root: document.body },
-        }}
-        enterOnly={true}
-        exitOnly={false}
-        onError={(error) => console.log(error)}
-      >
-        <div className="ARTag"> </div>
-      </XRButton>
-
       <Canvas>
-        <XR>
+        <XR onSessionStart={(event) => console.log("AR INIT", event)}>
           {texture && (
             <mesh position={[0, 2, -2]}>
               <ambientLight intensity={0.1} />
