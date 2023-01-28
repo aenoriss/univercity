@@ -23,7 +23,13 @@ export default function ARDisplay({ selectedReverie }) {
         setImg(iconBase);
       }
     );
+
+    document.getElementById("ARButtonId").click();
   }, []);
+
+  useEffect(() => {
+    console.log("AR Rendered");
+  });
 
   useEffect(() => {
     if (img) {
@@ -37,7 +43,7 @@ export default function ARDisplay({ selectedReverie }) {
 
   useEffect(() => {
     console.log("textureasdasdasd", texture);
-    document.getElementById("ARButtonId").click();
+    
   }, [texture]);
 
   return (
