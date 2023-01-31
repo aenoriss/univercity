@@ -1011,7 +1011,7 @@ input {
   overflow: hidden
 }
 
-.mapContainer{
+.backgroundMapContainer{
   position: fixed;
   bottom: -4rem;
   height: 20rem;

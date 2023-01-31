@@ -218,7 +218,7 @@ export default function Landing({ stageHandler }) {
                   />
                 </a>
               </div>
-              <div className="mapContainer">
+              <div className="backgroundMapContainer">
               <img
                 className="backgroundMap"
                 src="sideworldFooterBackground.png"
