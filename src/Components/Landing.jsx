@@ -138,7 +138,7 @@ export default function Landing({ stageHandler }) {
                   <span className="highlightedText">Twist</span> space.
                 </p>
                 <p>
-                  <span className="highlightedText">Meet</span> new people!
+                  <span className="highlightedText">Meet</span> cool people!
                 </p>
               </p>
 
