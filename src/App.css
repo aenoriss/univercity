@@ -32,7 +32,8 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%
+  width: 100%;
+  overflow: hidden;
 }
 
 
@@ -54,6 +55,7 @@ html {
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  overflow: hidden;
   align-items: center;
   width: 100%;
   max-width: 38rem;
@@ -765,6 +767,7 @@ input {
     justify-content: center;
     text-align: center;
     align-items: center;
+    overflow: hidden;
   background-position: center;
   /*background-repeat: no-repeat;*/
   background-size: cover;
@@ -774,6 +777,7 @@ input {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-top: 2rem;
   height: 4rem;
   width: 100%;
   z-index: 500;
@@ -821,6 +825,7 @@ input {
   width: 100%;
   justify-content: center;
   align-items: center;
+  overflow: hidden
 }
 
 .desktopWarning_content{
@@ -1000,14 +1005,20 @@ input {
 }
 
 .backgroundMap{
-  position: absolute;
-  bottom: -4rem;
-  left: 0;
-  margin-top: 5rem;
   width: 150%;
   z-index: 200;
   animation: move-right 20s linear infinite alternate;
+  overflow: hidden
 }
+
+.mapContainer{
+  position: fixed;
+  bottom: -6rem;
+  height: 20rem;
+  left: 0;
+}
+
+
 
 .mobilePanel_carrousel_content_title{
   font-size: 1.6rem;

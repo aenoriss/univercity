@@ -218,10 +218,12 @@ export default function Landing({ stageHandler }) {
                   />
                 </a>
               </div>
+              <div className="mapContainer">
               <img
                 className="backgroundMap"
                 src="sideworldFooterBackground.png"
               ></img>
+              </div>
             </div>
           )}
           {!isMobile && (
