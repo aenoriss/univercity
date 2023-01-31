@@ -125,7 +125,8 @@ export default function Landing({ stageHandler }) {
                   animation: "pop",
                   animationName: "spin",
                   animationIterationCount: "infinite",
-                  animationDuration: "15s",
+                  animationDuration: "20s",
+                  animationDirection: "alternate",
                   width: "150px",
                 }}
                 onMouseEnter={(e) => (e.target.style.transform = "scale(1)")}
@@ -134,7 +135,7 @@ export default function Landing({ stageHandler }) {
               <div className="landing_title">SIDEWORLD</div>
               <p className="subTitle">
                 <p>
-                  <span className="highlightedText">Play</span> with space.
+                  <span className="highlightedText">Twist</span> space.
                 </p>
                 <p>
                   <span className="highlightedText">Meet</span> new people!
@@ -219,7 +220,6 @@ export default function Landing({ stageHandler }) {
               </div>
               <img
                 className="backgroundMap"
-                width="100%"
                 src="sideworldFooterBackground.png"
               ></img>
             </div>
