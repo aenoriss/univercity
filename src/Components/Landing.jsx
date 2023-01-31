@@ -59,19 +59,6 @@ export default function Landing({ stageHandler }) {
       setHide(true);
     }, 500);
 
-    if(carrDir == "right"){
-      setprevStone(carrouselStage - 1);
-      if (carrouselStage > 5) {
-        setprevStone(5);
-      }
-    }else{
-      setprevStone(carrouselStage + 1);
-      if (carrouselStage < 0) {
-        setprevStone(0);
-      }
-    }
-
-    
   }, [carrouselStage]);
 
   useEffect(() => {
@@ -176,7 +163,7 @@ export default function Landing({ stageHandler }) {
                   {dreamstones.map((dreamstone, i) => {
 
                     return (
-                      (carrouselStage == i || (prevStone == i && !hide)) && (
+                      carrouselStage == i  && (
                         <div
                           className={`mobilePanel_carrousel_crystal`}
                           style={{
