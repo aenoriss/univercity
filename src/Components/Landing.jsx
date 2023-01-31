@@ -11,19 +11,19 @@ export default function Landing({ stageHandler }) {
   const [dreamstones, setDreamstones] = useState([
     {
       title: "Multicolor",
-      description: "Quickly share your thoughts with everyone around you",
+      description: "Share your thoughts with people around you",
       style: "mobilePanel_carrousel_content_multicolorCrystal_title",
       img: "./crystals/crystal_all.png",
     },
     {
       title: "Green",
-      description: "Creates a conversation thread powered by Augmented Reality",
+      description: "Creates an Augmented Reality thread",
       style: "mobilePanel_carrousel_content_greenCrystal_title",
       img: "./crystals/crystal_green.png",
     },
     {
       title: "Blue",
-      description: "Deploys a portal to connect communities over two places",
+      description: "Deploys a portal to connect two places",
       style: "mobilePanel_carrousel_content_blueCrystal_title",
       img: "./crystals/crystal_blue.png",
     },
@@ -37,7 +37,7 @@ export default function Landing({ stageHandler }) {
     {
       title: "Yellow",
       description:
-        "Summons up to 5 random sidewalkers from all over the world to your place!",
+        "Summons up to 5 random sidewalkers to your place!",
       style: "mobilePanel_carrousel_content_yellowCrystal_title",
       img: "./crystals/crystal_yellow.png",
     },
