@@ -24,7 +24,7 @@ export default function ARDisplay({ selectedReverie }) {
       }
     );
 
-    // document.getElementById("ARButtonId").click();
+    document.getElementById("ARButtonId").click();
   }, []);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function ARDisplay({ selectedReverie }) {
           exitOnly={false}
           onError={(error) => console.log(error)}
         >
-          <div className="ARTag">sadasdsadasdasdadsa </div>
+          <div className="ARTag"> </div>
         </XRButton>
       </div>
 
