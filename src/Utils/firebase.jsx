@@ -2,8 +2,10 @@ import { initializeApp } from "firebase/app";
 import {
   getDatabase,
   set,
+  get,
   ref,
   update,
+  off,
   push,
   onValue,
 } from "firebase/database";
@@ -14,7 +16,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -38,7 +40,6 @@ export const FirebaseSignup = async (email, password) => {
     .then((userCredential) => {
       //Signed In
       user = userCredential.user;
-      // console.log("USER CREDENTIALS", user);
       return user;
     })
     .catch((error) => {
@@ -54,7 +55,6 @@ export const FirebaseSignin = async (email, password) => {
     .then((userCredential) => {
       //Signed In
       user = userCredential.user;
-      // console.log("USER CREDENTIALS", user);
       return user;
     })
     .catch((error) => {
@@ -72,19 +72,17 @@ export const DBAddUserData = async (data) => {
 };
 
 export const DBAddReverie = async (data) => {
-  console.log("DATAAAA", data)
+  let newReverie = data;
   const reverieListRef = ref(db, "posts");
   const newPostRef = push(reverieListRef);
-  return set(newPostRef, data);
+  newReverie.id = newPostRef.key;
+  return await set(newPostRef, newReverie);
 };
 
 export const DBRetrieveRev = async (callback) => {
-  console.log("ASSADASD");
-
   const reverieRef = ref(db, "posts");
   onValue(reverieRef, (snapshot) => {
     const data = snapshot.val();
-    console.log("xddd", data);
     callback(data);
   });
 };
@@ -95,10 +93,8 @@ export const FirebaseStorage = async (file, user) => {
 
   //Create a reference to the image path
   const imgRef = sRef(storage, "user/" + user.uid + "/" + file.name);
-  // console.log("IMG REF", imgRef["_location"]["path_"]);
 
   return await uploadBytes(imgRef, file).then((snapshot) => {
-    // console.log("snapshot", snapshot);
     return snapshot["ref"]["_location"];
   });
 };
@@ -109,7 +105,6 @@ export const getFile = async (file) => {
     .then((url) => {
       // `url` is the download URL for 'images/stars.jpg'
 
-      // console.log("URL", url);
 
       return url;
     })
@@ -118,12 +113,11 @@ export const getFile = async (file) => {
     });
 };
 
-export const signInWithGoogle = async() => {
+export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-  
-  return signInWithPopup(auth, provider)
-  .then((result) => {
+  provider.setCustomParameters({ prompt: "select_account" });
+
+  return signInWithPopup(auth, provider).then((result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
@@ -131,5 +125,30 @@ export const signInWithGoogle = async() => {
     const user = result.user;
 
     return user;
-  })
-}
+  });
+};
+
+export const DBAddReply = async (reverieID, newReply) => {
+  let newReplyFinal = {
+    text: newReply.text,
+    date: newReply.date,
+  };
+  const reverieRef = ref(db, `posts/${reverieID}/replies`);
+  let newReplyRef = push(reverieRef);
+  newReply.id = newReplyRef.key;
+
+  await set(newReplyRef, newReplyFinal);
+};
+
+export const DBRetrieveRevReplies = async (reverieID, callback) => {
+  const reverieRef = ref(db, `posts/${reverieID}/replies`);
+  onValue(reverieRef, (snapshot) => {
+    const data = snapshot.val();
+    callback(data);
+  });
+};
+
+export const closeListener = async (path) => {
+  const refListener = await ref(db, path);
+  off(refListener)
+};

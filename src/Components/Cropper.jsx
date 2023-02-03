@@ -13,7 +13,6 @@ export default function Cropper() {
     const [result, setResult] = useState()
 
     useEffect(()=> {
-        console.log("crop", crop)
         crop && imageCropping()
     }, [crop])
 
@@ -42,7 +41,6 @@ export default function Cropper() {
         imageElement.onload = () => {
             ctx.drawImage(imageElement, crop.x / imageElement , crop.y, crop.width, crop.height, 0, 0, 400, 400);
             const croppedImage = canvas.toDataURL();
-            console.log("IMG", croppedImage);
             setResult(croppedImage);
           };
     }

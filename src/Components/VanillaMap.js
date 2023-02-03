@@ -69,6 +69,7 @@ export function setMarkers(markers, map) {
 }
 
 export function getMapLocation(position, map) {
+  console.log("MAP LOCATION REQUESTED")
   if(userMarker != undefined){
     userMarker.close()
   }
@@ -116,7 +117,7 @@ export async function closeMap() {
 
 }
 
-export function initWebGLOverlayView(map) {
+export async function initWebGLOverlayView(map) {
   let scene, renderer, camera, loader;
   const google = window.google;
   webGLOverlayView = new google.maps.WebGLOverlayView();
@@ -127,6 +128,7 @@ export function initWebGLOverlayView(map) {
       elementType: "labels",
       stylers: [{ visibility: "off" }],
     },
+
   ];
 
   map.set("styles", customStyled);
@@ -204,7 +206,6 @@ export function initWebGLOverlayView(map) {
 
   webGLOverlayView.onRemove = () => {
     // Remove all intermediate objects.
-    console.log("xzczxczcz")
   }
 
 
@@ -227,4 +228,6 @@ export function initWebGLOverlayView(map) {
     renderer.resetState();
   };
   webGLOverlayView.setMap(map);
+
+  return webGLOverlayView;
 }

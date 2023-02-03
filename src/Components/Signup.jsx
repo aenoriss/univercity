@@ -50,7 +50,6 @@ export default function Signup({ userDataHandler }) {
 
   const GoogleLoginHandler = () => {
       signInWithGoogle().then((result)=> {
-        console.log("result", result)
         if (result != undefined) {
           userDataHandler(result);
         }

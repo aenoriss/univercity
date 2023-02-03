@@ -95,7 +95,6 @@ export default function Map() {
       directionalLight.position.set(0.5, -1, 0.5);
       scene.add(directionalLight);
 
-      console.log("SCENEE", scene);
 
       // load the model
       loader = new GLTFLoader();
@@ -164,7 +163,6 @@ export default function Map() {
     (async () => {
       const map = await initMap();
       // getLocation(map);
-      console.log("XDDD", map);
       initWebGLOverlayView(map);
     })();
   });

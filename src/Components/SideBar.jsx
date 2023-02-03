@@ -43,36 +43,39 @@ export default function Sidebar({ userData, selectedReverie }) {
   }, [reverieList]);
 
   useEffect(() => {
-    console.log("SIDEBAR RENDERED");
   });
 
   useEffect(() => {
-    console.log("asdasdadssadasdasdsasdasdasdasdasd");
     DBRetrieveRev(setReverieList);
     if (loadedMap == false) {
       initMap().then((map) => {
-        console.log("apiLoader", map);
         setMap(map);
-        initWebGLOverlayView(map);
+        initWebGLOverlayView(map).then((data)=> {
+          console.log("MAP STARTED", data)
+          navigator.geolocation.getCurrentPosition((position) => {
+            getMapLocation(position.coords, map);
+          });
+          if (navigator.geolocation) {
+            //Start tracking user's location
+            console.log("pos requested from sidebar comp")
+            navigator.geolocation.watchPosition(
+              (position) => {
+                // do something with the position data
+                setuserPos({
+                  lat: position.coords["latitude"],
+                  long: position.coords["longitude"],
+                });
+                getMapLocation(position.coords, map);
+              },
+              (error) => {
+                // handle the error
+              },
+              { enableHighAccuracy: false }
+            );
+          }
+        })
 
-        if (navigator.geolocation) {
-          //Start tracking user's location
-
-          navigator.geolocation.watchPosition(
-            (position) => {
-              // do something with the position data
-              setuserPos({
-                lat: position.coords["latitude"],
-                long: position.coords["longitude"],
-              });
-              getMapLocation(position.coords, map);
-            },
-            (error) => {
-              // handle the error
-            },
-            { enableHighAccuracy: false }
-          );
-        }
+     
       });
       setLoadedMap(true);
     }
@@ -83,16 +86,13 @@ export default function Sidebar({ userData, selectedReverie }) {
     if ((userPos != null) & (reverieList != null)) {
       let reverieArr = [];
       for (const key in reverieList) {
-        console.log(distance(userPos, reverieList[key].location));
         if (distance(userPos, reverieList[key].location) < 50) {
-          console.log("locationnnn", reverieList[key]);
           let distanceValue = distance(userPos, reverieList[key].location);
 
           reverieList[key].distance = Math.round(distanceValue * 100) / 100;
           reverieArr.push(reverieList[key]);
         }
       }
-      console.log("reverieList", reverieArr);
 
       reverieDistance && reverieDistance.map((reverie) => {
         getFile(reverie["content"]["attachment"]["img"]["path_"]).then(
@@ -108,7 +108,6 @@ export default function Sidebar({ userData, selectedReverie }) {
   const distance = (from, to) => {
     // Computational optimization for no change.
 
-    console.log("asadasd", from, to);
 
     if (from.lat === to.lat && from.long === to.long) {
       return 0;
@@ -140,13 +139,11 @@ export default function Sidebar({ userData, selectedReverie }) {
   };
 
   const ARHandler = (reverie) => {
-    console.log("REVERKNDASD", reverie);
     selectedReverie(reverie);
   };
 
   const tabHandler = (tab) => {
     let tabId = tab.target.id;
-    console.log("tabId",tabId)
     setPanelStage(tabId)
   };
 
@@ -161,11 +158,7 @@ export default function Sidebar({ userData, selectedReverie }) {
         user: userData.uid,
         content: { title, description, attachment: { img: snapshot } },
         location: { lat: userPos.lat, long: userPos.long },
-        replies: [
-          { text: "Hello World", date: Date.now() },
-          { text: "Reply 1", date: Date.now() },
-          { text: "Reply 1", date: Date.now() },
-        ],
+        replies: [],
         time: Date.now(),
       }).then((res) => {});
     });

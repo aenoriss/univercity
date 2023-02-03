@@ -1,22 +1,55 @@
 import { useEffect, useState, useRef } from "react";
+import { DBAddReply, DBRetrieveRevReplies,closeListener} from "../Utils/firebase";
 
 export default function ReplyBox({ selectedReverie }) {
+  const [reply, setReply] = useState();
+  const [replyObj, setReplyObj] = useState([]);
+  const [replyArr, setReplyArr] = useState([]);
+
+  useEffect(()=> {
+     //component unmounted
+     return () => {
+      closeListener(`posts/${selectedReverie["id"]}/replies`)
+    };
+  },[])
+
+
   useEffect(() => {
-    // console.log("textureasdasdasd", texture);
-  }, []);
+    DBRetrieveRevReplies(selectedReverie["id"], setReplyObj);
+  }, [selectedReverie]);
+
+  useEffect(() => {
+    if (replyObj && Object.keys(replyObj).length > 0) {
+      let arrReplyList = [];
+      for (const key in replyObj) {
+        arrReplyList.push(replyObj[key]);
+      }
+      setReplyArr(arrReplyList);
+    }
+  }, [replyObj]);
+  
+
+  const replyHandler = (e) => {
+    setReply(e.target.value);
+  };
+
+  useEffect(() => {
+    let replyBox = document.getElementById("containerScroll")
+    replyBox.scrollTo(0, replyBox.scrollHeight);
+  }, [replyArr]);
+
+  const replySubmitHandler = () => {
+    console.log("replyText", reply);
+    DBAddReply(selectedReverie.id, { text: reply, date: Date.now() });
+    setReply("");
+  };
 
   return (
-    <>
-      <div className="reverie_reply_list">
-        <div>
-          <div className="addButton">
-            <div>+</div>
-          </div>
-        </div>
-
+    <div className="replyContainer">
+      <div id="containerScroll" className="reverie_reply_list">
         <div>
           {selectedReverie &&
-            selectedReverie["replies"].map((reply) => {
+            replyArr.map((reply) => {
               let postDate = {
                 time:
                   new Date(reply.date).getHours().toString() +
@@ -31,7 +64,7 @@ export default function ReplyBox({ selectedReverie }) {
                   "/" +
                   new Date(reply.date).getFullYear().toString(),
               };
-              console.log("postDate", postDate);
+              // console.log("postDate", postDate);
               return (
                 <div className="reverie_reply_item">
                   <div className="reverie_reply_item_img">
@@ -46,6 +79,18 @@ export default function ReplyBox({ selectedReverie }) {
             })}
         </div>
       </div>
-    </>
+      <div className="replyInputContainer">
+        <input
+          type="text"
+          className="replyInput"
+          placeholder="Share yout toughts!"
+          value={reply}
+          onChange={replyHandler}
+        />
+        <div className="addButton" onClick={replySubmitHandler}>
+          <div>+</div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -18,8 +18,6 @@ const ARScene = ({ selectedReverie }) => {
     // model.setAttribute('rotation', '0 180 0');
     scene.appendChild(model);
 
-    console.log("scenescenescene", scene)
-
   }, [selectedReverie]);
 
   return (

@@ -624,17 +624,18 @@ input {
 
 .reverie_reply_list{
   width: 98%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items:flex-start;
+  overflow: scroll;
   padding: 1rem;
 }
 
 .reverie_reply_item{
   display: flex;
   flex-direction: row;
-  padding: 1rem;
   align-items: left;
   width: 100%;
   height: 6rem;
@@ -664,7 +665,7 @@ input {
   font-size: 0.9rem;
   flex-direction: row;
   align-items: center;
-  justify-content: left;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -673,26 +674,32 @@ input {
   height: 100%;
   border-radius: 0.3rem;
   z-index: 100;
-  padding: 0.5rem;
-  padding-bottom: 2rem;
   position: absolute;
   bottom: 0;
-  max-height: 15rem;
+  max-height: 20rem;
   z-index: 100;
   display: flex;
+  background-color: white;
   flex-direction: column;
   align-items: center;
   justify-content: left;
-  overflow: scroll;
 }
 
 .reverie_info_panel_content{
+  width:80%;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: left;
+}
+
+.reverie_info_panel_content_text{
   margin-left: 1rem;
   width: 100%;
   margin-top: -0.5rem;
   display: flex;
   flex-direction: column;
-  justify-items: left;
+  justify-items: flex-start;
   align-items: left;
   text-align: left;
 }
@@ -707,28 +714,26 @@ input {
   -webkit-text-fill-color: transparent;
   mix-blend-mode: multiply;
   overflow:hidden;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: left;
+  text-align: center;
+  margin-left: -30%;
+
+}
+
+.reverie_info_description{
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: left;
+  text-align: center;
+  margin-left: -30%;
 }
 
 .reverie_reply_item_content{
   margin-left: 1rem;
-}
-
-.addButton{
-  width: 4rem;
-  height: 4rem;
-  background-color:#f273bf;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 3rem;
-  color: white;
-  border-radius: 2rem;
-  margin-bottom: 1rem;
-}
-
-.addButton>div{
-  margin-bottom: 0.5rem;
 }
 
 .text{
@@ -1079,4 +1084,49 @@ input {
   to {
     transform: translateX(-20%);
   }
+}
+.replyContainer{
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  width: 100%;
+  overflow: scroll;
+}
+
+.replyInputContainer{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 3rem;
+  justify-content: center;
+}
+
+.replyInput{
+  width: 80%;
+  height: 100%;
+}
+
+.addButton{
+  width: 3rem;
+  height: 3rem;
+  background-color:#f273bf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2rem;
+  color: white;
+  border-radius: 0rem 2rem 2rem 0rem;
+  margin-bottom: 1rem;
+}
+
+.addButton>div{
+  margin-bottom: 0.5rem;
+}
+
+.backButtonContainer{
+  /* margin-right: 1rem; */
+  font-size: 2rem;
+  width: 20%;
+  color: lightgray;
 }

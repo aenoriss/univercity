@@ -94,11 +94,9 @@ export default function Landing({ stageHandler }) {
   }, []);
 
   useEffect(() => {
-    console.log("isMobile", isMobile);
   }, [isMobile]);
 
   useEffect(() => {
-    console.log("carrouselStage", carrouselStage);
   }, [carrouselStage]);
 
   const handleCarrousel = (e) => {

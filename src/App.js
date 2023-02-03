@@ -6,15 +6,12 @@ import Landing from "./Components/Landing";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 // import Map from "./Components/Map";
 import {
-  getMapLocation,
-  initMap,
-  setMarkers,
-  initWebGLOverlayView,
   closeMap
 } from "./Components/VanillaMap";
 import Sidebar from "./Components/SideBar";
 // import ARDisplay from "./Components/ARDisplay";
 import ARDisplay from "./Components/ARDisplay";
+
 
 // import Map from "./Components/Map"
 
@@ -34,7 +31,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("REACHEEEED",selectedReverie);
     if(selectedReverie){
       setGlobalStage(2);
       closeMap()
@@ -67,7 +63,7 @@ function App() {
         <Sidebar className="sidebar" userData={userData} selectedReverie={setSelectedReverie} globalStage={setGlobalStage}/>
       )}
 
-      {globalStage == 2 && <ARDisplay className="ARDisplay" selectedReverie={selectedReverie} />}
+      {globalStage == 2 && <ARDisplay className="ARDisplay" selectedReverie={selectedReverie} globalStage={setGlobalStage} />}
     </div>
   );
 }
