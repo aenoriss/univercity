@@ -46,6 +46,7 @@ export default function Sidebar({ userData, selectedReverie }) {
   });
 
   useEffect(() => {
+    console.log("init init 2")
     DBRetrieveRev(setReverieList);
     if (loadedMap == false) {
       initMap().then((map) => {

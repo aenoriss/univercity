@@ -32,9 +32,9 @@ export function setMarkers(markers, map) {
 
   //Clean Map
   markerArr.forEach((marker) => {
-    marker.setMap(null)
+    marker.setMap(null);
     markerArr = [];
-  })
+  });
 
   for (const key in markers) {
     let img = document.createElement("img");
@@ -64,16 +64,16 @@ export function setMarkers(markers, map) {
 
   //Populate Map
   markerArr.forEach((marker) => {
-    marker.setMap(map)
-  })
+    marker.setMap(map);
+  });
 }
 
 export function getMapLocation(position, map) {
-  console.log("MAP LOCATION REQUESTED")
-  if(userMarker != undefined){
-    userMarker.close()
+  console.log("MAP LOCATION REQUESTED");
+  if (userMarker != undefined) {
+    userMarker.close();
   }
-  
+
   const google = window.google;
   userMarker = new google.maps.InfoWindow();
 
@@ -105,22 +105,25 @@ export async function initMap() {
   const mapDiv = document.getElementById("map");
   const apiLoader = new Loader(apiOptions);
   await apiLoader.load();
+  console.log("apiLoader", apiLoader)
   const google = window.google;
 
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
 export async function closeMap() {
-  webGLOverlayView.setMap(null)
+  webGLOverlayView.setMap(null);
   const mapDiv = document.getElementById("map");
   mapDiv.innerHTML = "";
-
 }
 
 export async function initWebGLOverlayView(map) {
+  
   let scene, renderer, camera, loader;
   const google = window.google;
   webGLOverlayView = new google.maps.WebGLOverlayView();
+  // webGLOverlayView.setMap(null);
+  console.log("analyze GL map object", webGLOverlayView);
 
   const customStyled = [
     {
@@ -128,7 +131,6 @@ export async function initWebGLOverlayView(map) {
       elementType: "labels",
       stylers: [{ visibility: "off" }],
     },
-
   ];
 
   map.set("styles", customStyled);
@@ -205,9 +207,11 @@ export async function initWebGLOverlayView(map) {
   };
 
   webGLOverlayView.onRemove = () => {
-    // Remove all intermediate objects.
-  }
-
+    // Remove all intermediate objects
+    console.log("UWU", scene);
+    // google = null;
+    // dispose of the scene and its resources
+  };
 
   webGLOverlayView.onDraw = ({ gl, transformer }) => {
     // update camera matrix to ensure the model is georeferenced correctly on the map
@@ -217,7 +221,7 @@ export async function initWebGLOverlayView(map) {
       altitude: 120,
     };
 
-   
+    // webGLOverlayView.onDraw = null;
     const matrix = transformer.fromLatLngAltitude(latLngAltitudeLiteral);
     camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix);
 
@@ -226,8 +230,10 @@ export async function initWebGLOverlayView(map) {
 
     // always reset the GL state
     renderer.resetState();
+
+    console.log("rendererrenderer");
+    
   };
   webGLOverlayView.setMap(map);
-
   return webGLOverlayView;
 }

@@ -1,106 +1,172 @@
-import { useEffect, useState, useRef } from "react";
-import { XRButton } from "@react-three/xr";
-import { Canvas, useLoader } from "@react-three/fiber";
-import { XR, useXR } from "@react-three/xr";
-import { getFile } from "../Utils/firebase";
-import { TextureLoader } from "three/src/loaders/TextureLoader";
-import ReplyBox from "./ReplyBox";
+import React, { useEffect } from "react";
+import "./outer-website.css";
 
-export default function ARDisplay({ selectedReverie, globalStage }) {
-  const [show, setShow] = useState(false);
-  const [img, setImg] = useState();
-  const [texture, setTexture] = useState(null);
+const ARScene = () => {
+  const INNER_FRAME_URL = "https://8w.8thwall.app/inner-ar";
+  const IFRAME_ID = "my-iframe";
+  const CONTROLS_ID = "iframeControls";
+  const START_BTN_ID = "startBtn";
+  const STOP_BTN_ID = "stopBtn";
+  const EXPAND_BTN_ID = "expandBtn";
+  const LOGO_ID = "poweredByLogo";
+  const DATE_ID = "date";
 
-  useEffect(() => {
-    setTimeout(function () {
-      setShow(true);
-    }, 3000);
+  const FULLSCREEN_IFRAME_CLASS = "fullscreen-iframe";
+  const FULLSCREEN_CONTROLS_CLASS = "fullscreen-iframeControls";
+  const FULLSCREEN_EXPAND_BTN_CLASS = "fullscreen-btn";
+  const FULLSCREEN_STOP_BTN_CLASS = "hidden";
 
-    getFile(selectedReverie["content"]["attachment"]["img"]["path_"]).then(
-      (iconBase) => {
-        setImg(iconBase);
-      }
-    );
+  const createObserver = () => {
+    let cameraActive;
 
-    document.getElementById("ARButtonId").click();
-  }, []);
-
-  useEffect(() => {
-  });
-
-  useEffect(() => {
-    if (img) {
-      const textureLoader = new TextureLoader();
-      textureLoader.load(img, function (texture) {
-        texture.needsUpdate = true;
-        setTexture(texture);
+    const handleIntersect = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (cameraActive && !entry.isIntersecting) {
+          stopAR();
+          cameraActive = false;
+        }
       });
-    }
-  }, [img]);
+    };
 
-  const returnButtonHandler = (e) => {
-    document.getElementById("ARButtonId").click();
-    globalStage(1);
+    window.addEventListener("message", (event) => {
+      if (event.data === "acceptedCamera") {
+        cameraActive = true;
+      }
+    });
+
+    const options = { threshold: 0.2 };
+    new IntersectionObserver(handleIntersect, options).observe(
+      document.getElementById(IFRAME_ID)
+    );
   };
 
-  useEffect(() => {
-  }, [texture]);
+  const dateCheck = () => {
+    const date = new Date();
+    document.getElementById(DATE_ID).innerHTML = `${date.toLocaleDateString(
+      "en-US",
+      { month: "long" }
+    )} ${date.toLocaleDateString("en-US", {
+      day: "numeric",
+    })}, ${date.toLocaleDateString("en-US", { year: "numeric" })}`;
+  };
+
+  const stopAR = () => {
+    const controls = document.getElementById(CONTROLS_ID);
+    controls.style.opacity = 1;
+    controls.classList.remove("fade-in");
+    controls.classList.add("fade-out");
+
+    const startBtn = document.getElementById(START_BTN_ID);
+    startBtn.style.opacity = 0;
+    startBtn.style.display = "block";
+    startBtn.classList.remove("fade-out");
+    startBtn.classList.add("fade-in");
+
+    const poweredByLogo = document.getElementById(LOGO_ID);
+    poweredByLogo.style.opacity = 0;
+    poweredByLogo.style.display = "block";
+    poweredByLogo.classList.remove("fade-out");
+    poweredByLogo.classList.add("fade-in");
+
+    document.getElementById(IFRAME_ID).setAttribute("src", "");
+
+    const styleCleanup = setTimeout(() => {
+      startBtn.style.opacity = 1;
+      startBtn.classList.remove("fade-in");
+
+      poweredByLogo.style.opacity = 1;
+      poweredByLogo.classList.remove("fade-in");
+
+      controls.style.display = "none";
+      controls.style.opacity = 0;
+      controls.classList.remove("fade-out");
+    }, 300);
+
+    setTimeout(() => {
+      clearTimeout(styleCleanup);
+    }, 900);
+  };
+
+  const toggleFullscreen = () => {
+    document
+      .getElementById(IFRAME_ID)
+      .classList.toggle(FULLSCREEN_IFRAME_CLASS);
+    document
+      .getElementById(CONTROLS_ID)
+      .classList.toggle(FULLSCREEN_CONTROLS_CLASS);
+    document
+      .getElementById(EXPAND_BTN_ID)
+      .classList.toggle(FULLSCREEN_EXPAND_BTN_CLASS);
+    document
+      .getElementById(STOP_BTN_ID)
+      .classList.toggle(FULLSCREEN_STOP_BTN_CLASS);
+  };
+
+  const startAR = () => {
+    const iframe = document.getElementById(IFRAME_ID);
+    const controls = document.getElementById(CONTROLS_ID);
+
+    const startBtn = document.getElementById(START_BTN_ID);
+    console.log("startBtnstartBtnstartBtn", startBtn);
+    startBtn != null && startBtn.classList.add("fade-out");
+
+    // checks if camera has been accepted in iframe before displaying controls
+    window.addEventListener("message", (event) => {
+      if (event.data !== "acceptedCamera") {
+        return;
+      }
+
+      controls.style.opacity = 0;
+
+      const styleCleanup = setTimeout(() => {
+        startBtn.style.display = "none";
+
+        controls.style.display = "block";
+      }, 300);
+
+      const uiFadeIn = setTimeout(() => {
+        controls.classList.add("fade-in");
+      }, 800);
+
+      setTimeout(() => {
+        clearTimeout(styleCleanup);
+        clearTimeout(uiFadeIn);
+      }, 900);
+    });
+
+    iframe.setAttribute("src", INNER_FRAME_URL); // This is where the AR iframe's source is set.
+  };
+
+  const onLoad = () => {
+    createObserver(); // handles intersection observer behavior
+    dateCheck(); // sets today's date in the article
+  };
+
+  // Add event listeners and callbacks for the body DOM.
+  window.addEventListener("load", onLoad, false);
+  window.toggleFullscreen = toggleFullscreen;
+  window.startAR = startAR;
+  window.stopAR = stopAR;
 
   return (
-    <>
-      <div className="reverie_info_panel">
-        <div className="backButtonContainer">
-          <div className="backButtonContainer" onClick={returnButtonHandler}>{"<"}</div>
-        </div>
-        <div className="reverie_info_panel_content">
-          <div className="reverie_info_panel_content_text">
-            <h1 className="reverie_info_panel_content_title">
-              {selectedReverie["content"].title}
-            </h1>
-            <p className="reverie_info_description">
-              {selectedReverie["content"].description}
-            </p>
-          </div>
-        </div>
+    <div id="inline-ar">
+      <button id="startBtn" onClick={startAR}>
+        <img src="./assets/outer-website-assets/start-ar-banner.svg" />
+      </button>
+      <div id="iframeControls">
+        <button id="expandBtn" onClick={toggleFullscreen}>
+          <div id="expandImg"></div>
+        </button>
+        <button id="stopBtn" onClick={stopAR}>
+          <div id="stopImg"></div>
+        </button>
       </div>
-
-      <div className="reverie_reply_panel">
-        <ReplyBox selectedReverie={selectedReverie} />
-      </div>
-
-      <div>
-        <XRButton
-          className="ARButtonStyle"
-          id="ARButtonId"
-          mode={"AR"}
-          sessionInit={{
-            optionalFeatures: ["local-floor", "dom-overlay"],
-            domOverlay: { root: document.body },
-          }}
-          enterOnly={false}
-          exitOnly={false}
-          onError={(error) => console.log(error)}
-        >
-          <div className="ARTag"></div>
-        </XRButton>
-      </div>
-
-      <Canvas>
-        <XR onSessionStart={(event) => console.log("AR INIT", event)}>
-          {texture && (
-            <mesh position={[0, 2, -2]}>
-              <ambientLight intensity={0.1} />
-              <planeBufferGeometry
-                args={[
-                  texture["source"]["data"].naturalWidth / 1000,
-                  texture["source"]["data"].naturalHeight / 1000,
-                ]}
-              />
-              <meshBasicMaterial map={texture} transparent={false} />
-            </mesh>
-          )}
-        </XR>
-      </Canvas>
-    </>
+      <iframe
+        id="my-iframe"
+        allow="camera;gyroscope;accelerometer;magnetometer;xr-spatial-tracking;microphone;"
+      ></iframe>
+    </div>
   );
-}
+};
+
+export default ARScene;
