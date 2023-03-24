@@ -45,10 +45,16 @@ export function setMarkers(markers, map) {
 
     getFile(markers[key]["content"]["attachment"]["img"]["path_"]).then(
       (iconBase) => {
-        let markerPos = {
-          lat: markers[key]["location"].lat,
-          lng: markers[key]["location"].long,
+        // let markerPos = {
+        //   lat:(mapOptions.center.lat + 0.003) + (Math.random()-0.5) * 0.02,
+        //   lng: (mapOptions.center.lng - 0.003) + (Math.random()-0.5) * 0.02,
+        // };
+
+         let markerPos = {
+          lat: markers[key]["content"]["location"]["lat"],
+          lng: markers[key]["content"]["location"]["lng"],
         };
+
         let marker = new google.maps.Marker({
           position: markerPos,
           map: map,
@@ -231,7 +237,7 @@ export async function initWebGLOverlayView(map) {
     // always reset the GL state
     renderer.resetState();
 
-    console.log("rendererrenderer");
+    // console.log("rendererrenderer");
     
   };
   webGLOverlayView.setMap(map);
