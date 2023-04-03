@@ -10,7 +10,7 @@ import {
 } from "./Components/VanillaMap";
 import Sidebar from "./Components/SideBar";
 // import ARDisplay from "./Components/ARDisplay";
-import ARDisplay from "./Components/ARDisplay";
+import ARDisplay2 from "./Components/ARDisplay2";
 
 
 // import Map from "./Components/Map"
@@ -63,7 +63,7 @@ function App() {
         <Sidebar className="sidebar" userData={userData} selectedReverie={setSelectedReverie} globalStage={setGlobalStage}/>
       )}
 
-      {globalStage == 2 && <ARDisplay className="ARDisplay" selectedReverie={selectedReverie} globalStage={setGlobalStage} />}
+      {globalStage == 2 && <ARDisplay2 className="ARDisplay2" selectedReverie={selectedReverie} globalStage={setGlobalStage} />}
     </div>
   );
 }

@@ -70,6 +70,7 @@ export default function Sidebar({ userData, selectedReverie }) {
               },
               (error) => {
                 // handle the error
+
               },
               { enableHighAccuracy: false }
             );
@@ -104,6 +105,7 @@ export default function Sidebar({ userData, selectedReverie }) {
 
       setReverieDistance(reverieArr);
     }
+
   }, [userPos, reverieList]);
 
   const distance = (from, to) => {
@@ -153,7 +155,12 @@ export default function Sidebar({ userData, selectedReverie }) {
   // };
 
   const submitHandler = (e) => {
-    //Here is where Firebase is contacted
+    if(userPos == null){
+      window.alert('Please make sure your browser can access your GPS location before posting');
+    }
+    if(userPos != null && imgContent!="" && title!="" && description!=""){
+      window.alert('You have successfully created the post');
+      //Here is where Firebase is contacted
     FirebaseStorage(imgContent, userData).then((snapshot) => {
       DBAddReverie({
         user: userData.uid,
@@ -163,6 +170,11 @@ export default function Sidebar({ userData, selectedReverie }) {
         time: Date.now(),
       }).then((res) => {});
     });
+      setPanelStage("list");
+    }
+    if(imgContent==''){
+     window.alert('Please make sure your choose something to post');
+    }
   };
 
 

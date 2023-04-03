@@ -31,6 +31,7 @@ export default function Signup({ userDataHandler }) {
 
   const submitHandler = () => {
     setStage(3);
+    window.alert('Thank you for registering with us');
     FirebaseSignup(email, password).then(() => {
       DBAddUserData({ full_name: fullname }).then(() => {
         setStage(0);
@@ -43,6 +44,9 @@ export default function Signup({ userDataHandler }) {
     FirebaseSignin(email, password).then((result) => {
       if (result != undefined) {
         userDataHandler(result);
+      }
+      else{
+       window.alert('We cannot find your account, please sign up');
       }
       clearFields();
     });
