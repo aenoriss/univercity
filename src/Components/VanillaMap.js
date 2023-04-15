@@ -39,7 +39,7 @@ export function setMarkers(markers, map) {
   for (const key in markers) {
     let img = document.createElement("img");
     img.src =
-      "https://firebasestorage.googleapis.com/v0/b/sideworld-93e4c.appspot.com/o/user%2FxWwGXF0nOmSTVXW0lOeZSWR5loE3%2Faenoris%20circle.png?alt=media&token=c2458960-3385-4b36-a0c4-16a5c09ac960";
+      "https://firebasestorage.googleapis.com/v0/b/sideworld-93e4c.appspot.com/o/user%2FaQnaxIzANMVdby1hIqBVqbMt4yi2%2FADCF421A-30EF-45FE-97E9-49408A624A0B.jpeg?alt=media&token=725668ef-b4d7-4b2f-b84e-94147400db68";
     img.style.width = "500px";
     img.style.height = "500px";
 
