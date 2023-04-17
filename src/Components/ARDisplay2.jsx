@@ -10,6 +10,9 @@ const ARDisplay2 = ({ selectedReverie, globalStage }) => {
   const videoRef = useRef(null);
   const [imageUrl, setImageUrl] = useState("");
   const [texture, setTexture] = useState(null);
+  //const videoRef2 = useRef(null);
+  const [audioUrl, setAudioUrl] = useState("");
+  const audioRef = useRef(new Audio());
 
   useEffect(() => {
     getFile(selectedReverie["content"]["attachment"]["img"]["path_"])
@@ -18,15 +21,36 @@ const ARDisplay2 = ({ selectedReverie, globalStage }) => {
   }, []);
 
   useEffect(() => {
+    const audioAttachment = selectedReverie?.content?.attachment?.audio;
+    if (audioAttachment && audioAttachment.path_) {
+      getFile(audioAttachment.path_)
+        .then(url => setAudioUrl(url))
+        .catch(error => console.log(error));
+    }
+  }, [selectedReverie]);
+
+  const handleAudioLoad = () => {
+     if (audioUrl) {
+       audioRef.current.src = audioUrl;
+       audioRef.current.play();
+       console.log("Audio link", audioUrl);
+    }
+ };
+
+  useEffect(() => {
     if (imageUrl) {
-      const textureLoader = new TextureLoader();
-      textureLoader.load(imageUrl, function (texture) {
-        texture.needsUpdate = true;
-        setTexture(texture);
-      });
+      // Check if the image is actually a video
+      const isVideo = imageUrl.endsWith('.mp4') || imageUrl.endsWith('.webm');
+      if (!isVideo) {
+        // Load the texture normally for images
+        const textureLoader = new TextureLoader();
+        textureLoader.load(imageUrl, function (texture) {
+          texture.needsUpdate = true;
+          setTexture(texture);
+        });
+      } 
     }
   }, [imageUrl]);
-  
 
   useEffect(() => {
     const constraints = { video: { facingMode: 'environment' }, audio: false };
@@ -51,15 +75,50 @@ const ARDisplay2 = ({ selectedReverie, globalStage }) => {
     };
   }, []);
 
-  useEffect(() => {
-  }, [texture]);
 
   const returnButtonHandler = (e) => {
-    globalStage(1);
+    //Trying to fix back button map rendering issue
+     window.location.reload();
+    
+    // Stop audio playback
+    audioRef.current.pause();
+  
+    // Stop camera
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject;
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
   };
 
+  useEffect(() => {
+  }, [texture]);
+  
+  useEffect(() => {
+  if (audioUrl) {
+    audioRef.current.src = audioUrl;
+
+    // Check if user agent is from iOS device
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS) {
+      // On iOS devices, audio can only be played in response to a user interaction
+      // So, we wait for the user to interact with the page and then play the audio
+      const handleClick = () => {
+        audioRef.current.play();
+        document.removeEventListener('click', handleClick);
+      };
+      document.addEventListener('click', handleClick);
+    } else {
+      // On other devices, play the audio immediately
+      audioRef.current.play();
+    }
+  }
+}, [audioUrl]);
+
   return (
-  <>
+   <>
       <div className="reverie_info_panel">
         <div className="backButtonContainer">
           <div className="backButtonContainer" onClick={returnButtonHandler}>{"<"}</div>
@@ -86,7 +145,7 @@ const ARDisplay2 = ({ selectedReverie, globalStage }) => {
             <Entity
              primitive="a-plane"
              position="0 2 -5"
-             material={{ src: texture?.source?.data }}
+             material={{ src: texture?.source?.data}}
              scale="2 2 2"
              />
         </Scene>
@@ -98,7 +157,6 @@ const ARDisplay2 = ({ selectedReverie, globalStage }) => {
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       />
     </div>
-
   </>  
   );
 };

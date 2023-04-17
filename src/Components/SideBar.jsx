@@ -29,6 +29,7 @@ export default function Sidebar({ userData, selectedReverie }) {
   const [reverieList, setReverieList] = useState();
   const [loadedMap, setLoadedMap] = useState(false);
   const [map, setMap] = useState(null);
+  const [audioContent, setAudioContent] = useState("");
 
   useEffect(() => {
     setTimeout(function () {
@@ -129,6 +130,7 @@ export default function Sidebar({ userData, selectedReverie }) {
     return arc * 6371008.8; // Earth arithmetic mean radius, per en.wikipedia.org/wiki/Earth_radius
   };
 
+
   const titleHandler = (e) => {
     setTitle(e.target.value);
   };
@@ -139,6 +141,10 @@ export default function Sidebar({ userData, selectedReverie }) {
 
   const imageHandler = (e) => {
     setImgContent(e.target.files[0]);
+  };
+
+  const audioHandler = (e) => {
+    setAudioContent(e.target.files[0]);
   };
 
   const ARHandler = (reverie) => {
@@ -158,20 +164,21 @@ export default function Sidebar({ userData, selectedReverie }) {
     if(userPos == null){
       window.alert('Please make sure your browser can access your GPS location before posting');
     }
-    if(userPos != null && imgContent!="" && title!="" && description!=""){
-      window.alert('You have successfully created the post');
-      //Here is where Firebase is contacted
-    FirebaseStorage(imgContent, userData).then((snapshot) => {
-      DBAddReverie({
-        user: userData.uid,
-        content: { title, description, attachment: { img: snapshot } },
-        location: { lat: userPos.lat, long: userPos.long },
-        replies: [],
-        time: Date.now(),
-      }).then((res) => {});
+    if (userPos != null && (imgContent != "" || audioContent != "") && title != "" && description != "") {
+    window.alert("You have successfully created the post");
+    FirebaseStorage(imgContent, userData).then((imgSnapshot) => {
+      FirebaseStorage(audioContent, userData).then((audioSnapshot) => {
+        DBAddReverie({
+          user: userData.uid,
+          content: { title, description, attachment: { img: imgSnapshot, audio: audioSnapshot } },
+          location: { lat: userPos.lat, long: userPos.long },
+          replies: [],
+          time: Date.now(),
+        }).then((res) => {});
+      });
     });
-      setPanelStage("list");
-    }
+    setPanelStage("list");
+   }
     if(imgContent==''){
      window.alert('Please make sure your choose something to post');
     }
@@ -229,6 +236,7 @@ export default function Sidebar({ userData, selectedReverie }) {
                 placeholder="Title"
                 value={title}
                 onChange={titleHandler}
+                autoCorrect="off"
               />
               <input
                 type="text"
@@ -236,20 +244,31 @@ export default function Sidebar({ userData, selectedReverie }) {
                 placeholder="Content"
                 value={description}
                 onChange={descriptionHandler}
+                autoCorrect="off"
               />
               
-              <input
-                type="file"
-                id="docpicker"
-                accept="image/png, image/jpeg"
-                onChange={imageHandler}
-              />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+               <input
+                  type="file"
+                  id="docpicker"
+                  accept="image/png, image/jpeg, video/mp4, video/webm"
+                  onChange={imageHandler}
+               /> 
+                <input
+                   type="file"
+                   id="audiopicker"
+                   accept="audio/mpeg, audio/wav"
+                   onChange={audioHandler}
+                 />
+              </div>
+
               {/* {userPos && <h2>{userPos.latitude + " " + userPos.longitude}</h2>} */}
               <div className="button_container_one">
                 <button onClick={submitHandler} id="createReverieButton">
                   Create
                 </button>
               </div>
+
             </div>
           </div>
         )}
