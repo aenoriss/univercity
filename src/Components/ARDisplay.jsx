@@ -22,7 +22,8 @@ const ARDisplay2 = () => {
   }, [posts]);
 
   const handleData = (data) => {
-    Object.entries(data).forEach((post) => {
+    console.log("data", data)
+    data & data.length > 0 && Object.entries(data).forEach((post) => {
       getFile(post[1].content.attachment.img.path_).then((imageUrl) => {
         if (imageUrl) {
           // Check if the image is actually a video
@@ -37,7 +38,7 @@ const ARDisplay2 = () => {
               console.log("post",updatedPost )
               data[post[0]] = updatedPost;
               setPosts(data);
-              // console.log("sdad")
+              console.log("sdad", data)
             });
           }
         }
@@ -185,8 +186,8 @@ const ARDisplay2 = () => {
               <Entity
                 key={key}
                 primitive="a-plane"
-                position={generateRandomPointInSphere(3)}
-                material={{ src: post?.texture?.source?.data}}
+                position="0 2 -5"
+                // material={{ src: post?.texture?.src}}
                 scale="2 2 2"
                 look-at="[0 0 0]"
               />

@@ -46,7 +46,7 @@ export default function Sidebar({ userData, selectedReverie }) {
 
 
   const submitHandler = (e) => {
-    FirebaseStorage(imgContent, userData).then((imgSnapshot) => {
+    FirebaseStorage(imgContent).then((imgSnapshot) => {
         DBAddReverie({
           content: {
             title,

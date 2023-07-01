@@ -20,13 +20,14 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAq8lOdn0ymXfqE4JvtvssasvAGGcRi8E8",
-  authDomain: "univercity-73841.firebaseapp.com",
-  databaseURL: "https://univercity-73841-default-rtdb.firebaseio.com",
-  projectId: "univercity-73841",
-  messagingSenderId: "1008219884566",
-  appId: "1:1008219884566:web:14a343f514b816164e7937",
-  storageBucket: "gs://univercity-73841.appspot.com",
+  apiKey: "AIzaSyCXX5qHRlFx5CBBKnH_X8fkrQQoL28joCU",
+  authDomain: "univercity2-9511c.firebaseapp.com",
+  projectId: "univercity2-9511c",
+  storageBucket: "univercity2-9511c.appspot.com",
+  messagingSenderId: "101774300794",
+  appId: "1:101774300794:web:f6000ee7283b20cf9ccdc3",
+  databaseURL: "https://univercity2-9511c-default-rtdb.firebaseio.com/",
+  storageBucket: "gs://univercity2-9511c.appspot.com",
 };
 
 const app = initializeApp(firebaseConfig);
