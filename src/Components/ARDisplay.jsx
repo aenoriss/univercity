@@ -23,12 +23,11 @@ const ARDisplay2 = () => {
 
   const handleData = (data) => {
     console.log("data", data)
-    data & data.length > 0 && Object.entries(data).forEach((post) => {
+    Object.entries(data).forEach((post) => {
       getFile(post[1].content.attachment.img.path_).then((imageUrl) => {
         if (imageUrl) {
           // Check if the image is actually a video
-          const isVideo =
-            imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
+          const isVideo = imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
           if (!isVideo) {
             // Load the texture normally for images
             const textureLoader = new TextureLoader();
@@ -38,7 +37,7 @@ const ARDisplay2 = () => {
               console.log("post",updatedPost )
               data[post[0]] = updatedPost;
               setPosts(data);
-              console.log("sdad", data)
+              console.log("sdad", posts)
             });
           }
         }
@@ -186,8 +185,8 @@ const ARDisplay2 = () => {
               <Entity
                 key={key}
                 primitive="a-plane"
-                position="0 2 -5"
-                // material={{ src: post?.texture?.src}}
+                position={generateRandomPointInSphere(3)}
+                material={{ src: post?.texture?.src}}
                 scale="2 2 2"
                 look-at="[0 0 0]"
               />
