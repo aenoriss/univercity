@@ -188,8 +188,7 @@ const ARDisplay2 = () => {
                 position={generateRandomPointInSphere(3)}
                 material={{ src: post?.texture?.source?.data}}
                 scale="1 1 1"
-                look-at="[camera]"
-
+                look-at="[0 0 0]"
               />
             ))}
           </Scene>
