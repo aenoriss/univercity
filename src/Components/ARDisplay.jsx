@@ -46,16 +46,11 @@ const ARDisplay2 = () => {
   };
 
   const generateRandomPointInSphere = (radius) => {
-    // Generate random spherical coordinates
-    const theta = Math.random() * 2 * Math.PI; // Azimuthal angle (longitude)
-    const phi = Math.acos(2 * Math.random() - 1); // Polar angle (latitude)
-
-    // Convert spherical coordinates to Cartesian coordinates
+    const theta = Math.random() * 2 * Math.PI;
+    const phi = Math.random() * Math.PI;
     const x = radius * Math.sin(phi) * Math.cos(theta);
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
-
-    // Return the generated point as an object
     return { x, y, z };
   };
 
@@ -185,7 +180,7 @@ const ARDisplay2 = () => {
               <Entity
                 key={key}
                 primitive="a-plane"
-                position={generateRandomPointInSphere(3)}
+                position={generateRandomPointInSphere(5)}
                 material={{ src: post?.texture?.src}}
                 scale="2 2 2"
                 look-at="[0 0 0]"
