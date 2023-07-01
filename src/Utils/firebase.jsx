@@ -20,14 +20,13 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDxb98jz8B5TiB76r7RTKEkOQENR-BRpo4",
-  authDomain: "sideworld-93e4c.firebaseapp.com",
-  projectId: "sideworld-93e4c",
-  storageBucket: "sideworld-93e4c.appspot.com",
-  messagingSenderId: "983344652417",
-  appId: "1:983344652417:web:6a96d3e14255a924bc6d80",
-  databaseURL: "https://sideworld-93e4c-default-rtdb.firebaseio.com/",
-  storageBucket: "gs://sideworld-93e4c.appspot.com/",
+  apiKey: "AIzaSyAq8lOdn0ymXfqE4JvtvssasvAGGcRi8E8",
+  authDomain: "univercity-73841.firebaseapp.com",
+  databaseURL: "https://univercity-73841-default-rtdb.firebaseio.com",
+  projectId: "univercity-73841",
+  messagingSenderId: "1008219884566",
+  appId: "1:1008219884566:web:14a343f514b816164e7937",
+  storageBucket: "gs://univercity-73841.appspot.com",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -79,7 +78,7 @@ export const DBAddReverie = async (data) => {
   return await set(newPostRef, newReverie);
 };
 
-export const DBRetrieveRev = async (callback) => {
+export const DBRetrieveRev = async(callback) => {
   const reverieRef = ref(db, "posts");
   onValue(reverieRef, (snapshot) => {
     const data = snapshot.val();
@@ -92,7 +91,7 @@ export const FirebaseStorage = async (file, user) => {
   const storage = getStorage();
 
   //Create a reference to the image path
-  const imgRef = sRef(storage, "user/" + user.uid + "/" + file.name);
+  const imgRef = sRef(storage, "img/" + file.name);
 
   return await uploadBytes(imgRef, file).then((snapshot) => {
     return snapshot["ref"]["_location"];
