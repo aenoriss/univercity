@@ -187,7 +187,7 @@ const ARDisplay2 = () => {
                 primitive="a-plane"
                 position={generateRandomPointInSphere(3)}
                 material={{ src: post?.texture?.source?.data}}
-                scale="1 1 1"
+                scale="2 2 2"
                 look-at="[0 0 0]"
               />
             ))}
