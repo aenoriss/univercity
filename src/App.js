@@ -12,9 +12,6 @@ import Sidebar from "./Components/SideBar";
 // import ARDisplay from "./Components/ARDisplay";
 import ARDisplay2 from "./Components/ARDisplay2";
 
-
-// import Map from "./Components/Map"
-
 function App() {
   const [globalStage, setGlobalStage] = useState(-1);
   const [userData, setUserData] = useState(null);
@@ -30,40 +27,12 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if(selectedReverie){
-      setGlobalStage(2);
-      closeMap()
-    }
-  }, [selectedReverie]);
-
-
-  const userDataHandler = (e) => {
-    localStorage.setItem("userData", JSON.stringify(e));
-    setUserData(e);
-    setGlobalStage(1);
-  };
-
-
-
   return (
     <div className="App">
-      {globalStage == -1 && userData == null && (
-        <Landing stageHandler={setGlobalStage} />
-      )}
-      {globalStage == 0 && userData == null && (
-        <Signup userDataHandler={userDataHandler} />
-      )}
-      {globalStage == 1 && (
         <div className="mapContainer">
-          <div id="map"></div>
+          <p>XR Viewer</p>
         </div>
-      )}
-      {globalStage == 1 && (
         <Sidebar className="sidebar" userData={userData} selectedReverie={setSelectedReverie} globalStage={setGlobalStage}/>
-      )}
-
-      {globalStage == 2 && <ARDisplay2 className="ARDisplay2" selectedReverie={selectedReverie} globalStage={setGlobalStage} />}
     </div>
   );
 }

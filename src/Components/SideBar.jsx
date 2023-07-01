@@ -23,7 +23,7 @@ export default function Sidebar({ userData, selectedReverie }) {
   const [description, setDescription] = useState("");
   const [imgContent, setImgContent] = useState("");
   const [show, setShow] = useState(false);
-  const [panelStage, setPanelStage] = useState("list");
+  const [panelStage, setPanelStage] = useState("create");
   const [reverieDistance, setReverieDistance] = useState();
   const [userPos, setuserPos] = useState(null);
   const [reverieList, setReverieList] = useState();
@@ -188,45 +188,11 @@ export default function Sidebar({ userData, selectedReverie }) {
   return (
     <div className={`sidebarContainer ${show ? "show" : ""}`}>
       <div className="tabContainer">
-        <div id= "list" onClick={tabHandler} className={`tab tabLeft ${panelStage == "list" ? "activeTab" : ""}`}>Nearby</div>
         <div id= "create" onClick={tabHandler} className={`tab tabRight ${panelStage == "create" ? "activeTab" : ""}`}>Create</div>
+        <div id= "list" onClick={tabHandler} className={`tab tabLeft ${panelStage == "list" ? "activeTab" : ""}`}>Nearby</div>
       </div>
       <div className="sidebarPanel">
-        {panelStage == "list" && (
-          <div className="reverieList_main">
-            <div className="reverie_form_header">
-              <h1 className="reverie_form_title">Reveries</h1>
-              <p>Dreaming around 🌠</p>
-            </div>
-            <div className="reverieList_list">
-            {reverieDistance &&
-              reverieDistance.map((reverie) => {
-                return (
-                  <div className="reverie_list_item"  onClick={() => ARHandler(reverie)}>
-                    <div className="reverie_text_section bg-image" style={{ backgroundImage: `url(${reverie["content"]["attachment"]["img"].file})`}}>
-                      <div className="reverie_header">
-                        <div className="reverie_title">
-                          {reverie["content"].title}
-                        </div>
-                        <div className="distanceTag">{reverie.distance}m</div>
-                      </div>
-                    </div>
-
-                    <div className="reverie_button_section">
-                      <div className="reverie_button_container">
-                        <button
-                          className="reverie_button"
-                        >
-                          Enter
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )})}
-        </div>
-        </div>)}
-
-        {panelStage == "create" && (
+      {panelStage == "create" && (
           <div className="create_reverie">
             <h1 className="reverie_form_title">Create Reverie</h1>
             <div className="reverie_form_container">
@@ -272,6 +238,39 @@ export default function Sidebar({ userData, selectedReverie }) {
             </div>
           </div>
         )}
+        {panelStage == "list" && (
+          <div className="reverieList_main">
+            <div className="reverie_form_header">
+              <h1 className="reverie_form_title">Reveries</h1>
+              <p>Dreaming around 🌠</p>
+            </div>
+            <div className="reverieList_list">
+            {reverieDistance &&
+              reverieDistance.map((reverie) => {
+                return (
+                  <div className="reverie_list_item"  onClick={() => ARHandler(reverie)}>
+                    <div className="reverie_text_section bg-image" style={{ backgroundImage: `url(${reverie["content"]["attachment"]["img"].file})`}}>
+                      <div className="reverie_header">
+                        <div className="reverie_title">
+                          {reverie["content"].title}
+                        </div>
+                        <div className="distanceTag">{reverie.distance}m</div>
+                      </div>
+                    </div>
+
+                    <div className="reverie_button_section">
+                      <div className="reverie_button_container">
+                        <button
+                          className="reverie_button"
+                        >
+                          Enter
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )})}
+        </div>
+        </div>)}
 
         </div>
         </div>

@@ -10,7 +10,6 @@ const ARDisplay2 = ({ selectedReverie, globalStage }) => {
   const videoRef = useRef(null);
   const [imageUrl, setImageUrl] = useState("");
   const [texture, setTexture] = useState(null);
-  //const videoRef2 = useRef(null);
   const [audioUrl, setAudioUrl] = useState("");
   const audioRef = useRef(new Audio());
 
