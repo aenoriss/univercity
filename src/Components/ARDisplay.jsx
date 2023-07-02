@@ -22,22 +22,26 @@ const ARDisplay2 = () => {
   }, [posts]);
 
   const handleData = (data) => {
-    console.log("data", data)
+    console.log("data", data);
     Object.entries(data).forEach((post) => {
       getFile(post[1].content.attachment.img.path_).then((imageUrl) => {
         if (imageUrl) {
           // Check if the image is actually a video
-          const isVideo = imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
+          const isVideo =
+            imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
           if (!isVideo) {
             // Load the texture normally for images
             const textureLoader = new TextureLoader();
             textureLoader.load(imageUrl, function (texture) {
               texture.needsUpdate = true;
-              const updatedPost = { ...post[1], texture: { src: texture.image } };
-              console.log("post",updatedPost )
+              const updatedPost = {
+                ...post[1],
+                texture: { src: texture.image },
+              };
+              console.log("post", updatedPost);
               data[post[0]] = updatedPost;
               setPosts(data);
-              console.log("sdad", posts)
+              console.log("sdad", posts);
             });
           }
         }
@@ -45,14 +49,14 @@ const ARDisplay2 = () => {
     });
   };
 
-  const generateRandomPointInSphere = (radius) => {
-    const theta = Math.random() * 2 * Math.PI;
-    const phi = Math.random() * Math.PI;
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
-    return { x, y, z };
-  };
+  // const generateRandomPosition = () => {
+  //   const distance = Math.random() * 10 + 5; // Adjust the distance range as needed
+  //   const angle = Math.random() * Math.PI * 2; // Random angle in radians
+  //   const x = distance * Math.cos(angle);
+  //   const y = distance * Math.sin(angle);
+  //   const z = distance; // Negative value to position in front of you
+  //   return { x, y, z };
+  // };
 
   // useEffect(() => {
   //   const audioAttachment = selectedReverie?.content?.attachment?.audio;
@@ -176,16 +180,23 @@ const ARDisplay2 = () => {
           }}
         >
           <Scene>
-            {Object.entries(posts).map(([key, post]) => (
-              <Entity
-                key={key}
-                primitive="a-plane"
-                position={generateRandomPointInSphere(5)}
-                material={{ src: post?.texture?.src}}
-                scale="2 2 2"
-                look-at="[0 0 0]"
-              />
-            ))}
+            {Object.entries(posts).map(([key, post], index) => {
+              const row = Math.floor(index / 3); // Calculate the row number
+              const column = index % 3; // Calculate the column number
+              const x = column * 3 - 3; // Adjust the x position based on the column
+              const y = row * -3 + 2; // Adjust the y position based on the row
+
+              return (
+                <Entity
+                  key={key}
+                  primitive="a-plane"
+                  position={`${x} ${y} -6`}
+                  material={{ src: post?.texture?.src }}
+                  scale="2 2 2"
+                  look-at="[0 0 0]"
+                />
+              );
+            })}
           </Scene>
         </div>
         <video
