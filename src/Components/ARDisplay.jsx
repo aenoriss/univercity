@@ -26,11 +26,9 @@ const ARDisplay2 = () => {
     Object.entries(data).forEach((post) => {
       getFile(post[1].content.attachment.img.path_).then((imageUrl) => {
         if (imageUrl) {
-          // Check if the image is actually a video
           const isVideo =
             imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
           if (!isVideo) {
-            // Load the texture normally for images
             const textureLoader = new TextureLoader();
             textureLoader.load(imageUrl, function (texture) {
               texture.needsUpdate = true;
@@ -39,9 +37,10 @@ const ARDisplay2 = () => {
                 texture: { src: texture.image },
               };
               console.log("post", updatedPost);
-              data[post[0]] = updatedPost;
-              setPosts(data);
-              console.log("sdad", posts);
+              setPosts((prevState) => ({
+                ...prevState,
+                [post[0]]: updatedPost,
+              }));
             });
           }
         }
