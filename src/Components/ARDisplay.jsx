@@ -5,7 +5,7 @@ import "aframe";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
 import { Entity, Scene } from "aframe-react";
 
-const ARDisplay2 = () => {
+const ARDisplay2 = ({portalOpen}) => {
   const [stream, setStream] = useState(null);
   const videoRef = useRef(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -21,15 +21,16 @@ const ARDisplay2 = () => {
     console.log("posts_updated", posts);
   }, [posts]);
 
-  const handleData = (data) => {
+  const handleData = async (data) => {
     console.log("data", data);
-    Object.entries(data).forEach((post) => {
-      getFile(post[1].content.attachment.img.path_).then((imageUrl) => {
-        if (imageUrl) {
-          const isVideo =
-            imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
-          if (!isVideo) {
-            const textureLoader = new TextureLoader();
+
+    const promises = Object.entries(data).map(async (post) => {
+      const imageUrl = await getFile(post[1].content.attachment.img.path_);
+      if (imageUrl) {
+        const isVideo = imageUrl.endsWith(".mp4") || imageUrl.endsWith(".webm");
+        if (!isVideo) {
+          const textureLoader = new TextureLoader();
+          return new Promise((resolve) => {
             textureLoader.load(imageUrl, function (texture) {
               texture.needsUpdate = true;
               const updatedPost = {
@@ -37,15 +38,23 @@ const ARDisplay2 = () => {
                 texture: { src: texture.image },
               };
               console.log("post", updatedPost);
-              setPosts((prevState) => ({
-                ...prevState,
-                [post[0]]: updatedPost,
-              }));
+              resolve(updatedPost);
             });
-          }
+          });
         }
-      });
+      }
     });
+
+    const updatedPosts = await Promise.all(promises);
+
+    const updatedData = Object.fromEntries(
+      updatedPosts.map((updatedPost, index) => [
+        Object.keys(data)[index],
+        updatedPost,
+      ])
+    );
+
+    setPosts(updatedData);
   };
 
   // const generateRandomPosition = () => {
@@ -179,23 +188,33 @@ const ARDisplay2 = () => {
           }}
         >
           <Scene>
-            {Object.entries(posts).map(([key, post], index) => {
-              const row = Math.floor(index / 3); // Calculate the row number
-              const column = index % 3; // Calculate the column number
-              const x = column * 3 - 3; // Adjust the x position based on the column
-              const y = row * -3 + 2; // Adjust the y position based on the row
+            {portalOpen &&
+              Object.entries(posts).map(([key, post], index) => {
+                const row = Math.floor(index / 3); // Calculate the row number
+                const column = index % 3; // Calculate the column number
+                const x = column * 3 - 3; // Adjust the x position based on the column
+                const y = row * -3 + 2; // Adjust the y position based on the row
 
-              return (
-                <Entity
-                  key={key}
-                  primitive="a-plane"
-                  position={`${x} ${y} -6`}
-                  material={{ src: post?.texture?.src }}
-                  scale="2 2 2"
-                  look-at="[0 0 0]"
-                />
-              );
-            })}
+                return (
+                  <Entity
+                    key={key}
+                    primitive="a-plane"
+                    position={`${x} ${y} -6`}
+                    material={{ src: post?.texture?.src }}
+                    scale="2 2 2"
+                    look-at="[0 0 0]"
+                  />
+                );
+              })}
+            {/* {!portalOpen && (
+              <Entity
+                primitive="a-plane"
+                position={`0 2 -5`}
+                // material={{ src: post?.texture?.src }}
+                scale="3 3 3"
+                look-at="[0 0 0]"
+              />
+            )} */}
           </Scene>
         </div>
         <video

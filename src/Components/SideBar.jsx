@@ -9,7 +9,7 @@ import {
   FirebaseStorage,
 } from "../Utils/firebase";
 
-export default function Sidebar({ userData, selectedReverie }) {
+export default function Sidebar({ portalOpen }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imgContent, setImgContent] = useState("");
@@ -35,15 +35,14 @@ export default function Sidebar({ userData, selectedReverie }) {
     setImgContent(e.target.files[0]);
   };
 
-  const ARHandler = (reverie) => {
-    selectedReverie(reverie);
-  };
+  // const ARHandler = (reverie) => {
+  //   selectedReverie(reverie);
+  // };
 
   const tabHandler = (tab) => {
     let tabId = tab.target.id;
     setPanelStage(tabId);
   };
-
 
   const submitHandler = (e) => {
     FirebaseStorage(imgContent).then((imgSnapshot) => {
@@ -65,7 +64,7 @@ export default function Sidebar({ userData, selectedReverie }) {
   return (
     <div className={`sidebarContainer ${show ? "show" : ""}`}>
       <div className="tabContainer">
-        <div
+        {/* <div
           id="create"
           onClick={tabHandler}
           className={`tab tabRight ${
@@ -73,7 +72,7 @@ export default function Sidebar({ userData, selectedReverie }) {
           }`}
         >
           Create
-        </div>
+        </div> */}
         {/* <div
           id="list"
           onClick={tabHandler}
@@ -83,7 +82,10 @@ export default function Sidebar({ userData, selectedReverie }) {
         </div> */}
       </div>
       <div className="sidebarPanel">
-        {panelStage == "create" && (
+        {!portalOpen && <div>
+          <h2>Press the button to open the portal and see what's up!</h2>
+        </div>}
+        {portalOpen && (
           <div className="create_reverie">
             <h1 className="reverie_form_title">Share your day</h1>
             <div className="reverie_form_container">

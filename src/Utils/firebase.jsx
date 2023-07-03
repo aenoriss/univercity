@@ -87,6 +87,14 @@ export const DBRetrieveRev = async(callback) => {
   });
 };
 
+export const DBRetrievePortalState = async(callback) => {
+  const reverieRef = ref(db, "button_State");
+  onValue(reverieRef, (snapshot) => {
+    const data = snapshot.val();
+    callback(data);
+  });
+};
+
 export const FirebaseStorage = async (file, user) => {
   //Create a root reference
   const storage = getStorage();
