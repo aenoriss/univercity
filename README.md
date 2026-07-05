@@ -2,7 +2,7 @@
 
 Connect college campuses worldwide through a "phygital" portal.
 
-I built this in 2023 as a way to make distance between campuses feel physical instead of abstract. A small ESP32-CAM device (the "portal") sits in a real place and streams its camera over the network. On the other end, a React AR web app turns that shared space into somewhere students can leave messages and meet across locations. The portal is the object you walk up to; the web app is the layer of content that lights up when it opens.
+I built this in 2023. The idea was simple. Put a small camera device (the "portal") in a real place, and let students somewhere else walk up to a version of that place in AR. A React web app turns the shared space into somewhere you can leave a message and cross paths with people from another campus. The portal is the object you approach. The web app is the content that lights up when it opens.
 
 ## What it does
 
@@ -13,7 +13,7 @@ I built this in 2023 as a way to make distance between campuses feel physical in
 
 ## How it works
 
-The project is two pieces: a Node WebSocket relay that carries the camera feed, and a React AR web app that renders the social layer.
+Two pieces do the work: a Node WebSocket relay that carries the camera feed, and a React AR web app that renders the social layer.
 
 ```mermaid
 flowchart LR
@@ -28,15 +28,15 @@ flowchart LR
 
 ### The camera relay
 
-The interesting part is the relay in `stream-relay/app.js`. It runs two separate `WebSocket.Server` instances in `noServer` mode and routes each incoming connection by URL path on the HTTP upgrade event: `/jpgstream_server` for the ESP32 camera producing frames, `/jpgstream_client` for browsers consuming them. Every binary JPEG that arrives on the producer socket is forwarded, untouched, to all open consumer sockets. There is no transcoding and no buffering, so latency stays low and the relay is completely stateless. The tradeoff is bandwidth: each frame is a full JPEG, so cost scales with resolution and frame rate rather than with motion.
+The relay is the piece I like most, and it lives in `stream-relay/app.js`. It spins up two separate `WebSocket.Server` instances in `noServer` mode. Each incoming connection is routed by URL path on the HTTP upgrade event. `/jpgstream_server` is the ESP32 producing frames. `/jpgstream_client` is a browser consuming them. Every JPEG that lands on the producer socket gets forwarded, untouched, to all open consumer sockets. Because it only forwards bytes and never transcodes or buffers, latency stays low and the relay holds no state. The tradeoff is bandwidth. Each frame ships as a full JPEG, so cost climbs with resolution and frame rate.
 
 ### The browser viewer
 
-On the receiving end (`stream-relay/public` served through an EJS page), the browser takes each WebSocket message, wraps `message.data` in a `Blob` object URL with `URL.createObjectURL`, and draws it to a `<canvas>` as soon as the image loads. It is MJPEG over WebSocket, done with a few lines and no player library.
+On the receiving end, the browser does almost nothing. It takes each WebSocket message, wraps `message.data` in a `Blob` object URL, and paints it to a `<canvas>` as the image loads. That is MJPEG over WebSocket, in a handful of lines, with no player library.
 
 ### The AR web layer
 
-The React app in `frontend/` is a separate surface. Its `ARDisplay` component pulls the phone's own rear camera through `getUserMedia` and uses it as a live background, then mounts an A-Frame `<Scene>` on top. Student posts come from Firebase, get loaded as textures, and are laid out as `a-plane` entities in a grid facing the viewer. All of it is gated on `portalOpen`, a boolean the app subscribes to from Firebase, so the physical portal opening in the real world is what switches the AR content on.
+The React app in `frontend/` is its own surface. `ARDisplay` grabs the phone's rear camera through `getUserMedia` and uses it as a live background. Then it mounts an A-Frame `<Scene>` on top. Student posts come from Firebase, load as textures, and lay out as `a-plane` entities in a grid facing the viewer. All of it hangs on one boolean, `portalOpen`, which the app subscribes to from Firebase. So when the physical portal opens in the real world, the AR content switches on.
 
 ## Tech stack
 
@@ -50,10 +50,8 @@ The React app in `frontend/` is a separate surface. Its `ARDisplay` component pu
 ```
 univercity/
   frontend/       React AR web app (Create React App)
-  stream-relay/   Node/WebSocket relay + canvas viewer (formerly portal_backend2)
+  stream-relay/   Node/WebSocket relay + canvas viewer
 ```
-
-This repo consolidates the original `univercity` frontend and its `portal_backend2` relay into one place, with history preserved.
 
 ## Running it
 
@@ -69,8 +67,8 @@ npm install
 npm start            # http://localhost:3000 (run one at a time or change ports)
 ```
 
-The frontend needs a Google Maps API key set as an environment variable before it will load the map. Do not commit it. The original `frontend/.env` shipped with a Maps key committed by mistake; if you are reusing this code, rotate that key in Google Cloud, since it stays in git history.
+The frontend reads a Google Maps API key from an environment variable to load the map. Use your own key and keep it out of source control.
 
 ## Status
 
-2023 prototype. The camera relay works end to end; the AR web layer is an early experiment built alongside my other location-based AR work from that year.
+2023 prototype. The camera relay works end to end. The AR web layer is an early experiment from the same year I spent building location-based AR.
