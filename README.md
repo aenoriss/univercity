@@ -42,6 +42,14 @@ The React app in `frontend/` is its own surface. `ARDisplay` grabs the phone's r
 
 Before anything renders, `ARDisplay` prefetches every reverie. It walks the Firebase posts, pulls each image through `getFile`, and loads it with a THREE `TextureLoader`. A `Promise.all` waits for the whole set, so nothing pops in half-loaded. The planes then tile three to a row in front of you, and each one carries `look-at="[0 0 0]"` so it turns to face the viewer wherever it lands.
 
+```mermaid
+flowchart LR
+  P[Firebase posts] -->|per post| G[getFile URL]
+  G --> T[TextureLoader]
+  T --> A[Promise.all]
+  A --> R[Tile in grid facing viewer]
+```
+
 ## Tech stack
 
 - Frontend: React 18, A-Frame, aframe-react, three.js, react-three-fiber, Google Maps JS API
