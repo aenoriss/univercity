@@ -28,7 +28,7 @@ flowchart LR
 
 ### The camera relay
 
-The relay is the piece I like most, and it lives in `stream-relay/app.js`. It spins up two separate `WebSocket.Server` instances in `noServer` mode. Each incoming connection is routed by URL path on the HTTP upgrade event. `/jpgstream_server` is the ESP32 producing frames. `/jpgstream_client` is a browser consuming them. Every JPEG that lands on the producer socket gets forwarded, untouched, to all open consumer sockets. Because it only forwards bytes and never transcodes or buffers, latency stays low and the relay holds no state. The tradeoff is bandwidth. Each frame ships as a full JPEG, so cost climbs with resolution and frame rate.
+The relay is the piece I like most, and it lives in `stream-relay/app.js`. It spins up two separate `WebSocket.Server` instances in `noServer` mode. Each incoming connection is routed by URL path on the HTTP upgrade event. `/jpgstream_server` is the ESP32 producing frames. `/jpgstream_client` is a browser consuming them. Every JPEG that lands on the producer socket gets forwarded, untouched, to all open consumer sockets. Because it only forwards bytes and never transcodes or buffers, latency stays low and the relay holds no state. Each frame ships as a full JPEG, so bandwidth climbs with resolution and frame rate.
 
 ### The browser viewer
 
@@ -36,7 +36,11 @@ On the receiving end, the browser does almost nothing. It takes each WebSocket m
 
 ### The AR web layer
 
-The React app in `frontend/` is its own surface. `ARDisplay` grabs the phone's rear camera through `getUserMedia` and uses it as a live background. Then it mounts an A-Frame `<Scene>` on top. Student posts come from Firebase, load as textures, and lay out as `a-plane` entities in a grid facing the viewer. All of it hangs on one boolean, `portalOpen`, which the app subscribes to from Firebase. So when the physical portal opens in the real world, the AR content switches on.
+The React app in `frontend/` is its own surface. `ARDisplay` grabs the phone's rear camera through `getUserMedia` and uses it as a live background. Then it mounts an A-Frame `<Scene>` on top. Student posts come from Firebase and become the content in that scene. All of it hangs on one boolean, `portalOpen`, that the app watches in real time. So when the physical portal opens in the real world, the AR content switches on.
+
+## Placing the reveries
+
+Before anything renders, `ARDisplay` prefetches every reverie. It walks the Firebase posts, pulls each image through `getFile`, and loads it with a THREE `TextureLoader`. A `Promise.all` waits for the whole set, so nothing pops in half-loaded. The planes then tile three to a row in front of you, and each one carries `look-at="[0 0 0]"` so it turns to face the viewer wherever it lands.
 
 ## Tech stack
 
