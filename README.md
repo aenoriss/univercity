@@ -1,3 +1,5 @@
+<img src="assets/header.webp" alt="univercity" width="100%">
+
 # UniverCity
 
 Connect college campuses worldwide through a "phygital" portal.
